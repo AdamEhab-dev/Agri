@@ -1,5 +1,5 @@
 <!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
-<title>أجرونوفا للأسمدة</title>
+<title>مصر الدولية للأسمدة</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Cairo:wght@300;400;600;700&family=Lalezar&display=swap" rel="stylesheet">
@@ -41,7 +41,7 @@ a { color: inherit; }
 .tint { position: absolute; inset: 0; opacity: 0; pointer-events: none; background: radial-gradient(ellipse 90% 75% at 50% 85%, color-mix(in srgb, var(--fc) 50%, #000), var(--fd) 55%, #030503 100%); }
 .burst { position: absolute; inset: 0; opacity: 0; pointer-events: none; background: radial-gradient(ellipse 70% 60% at 50% 50%, color-mix(in srgb, var(--fc) 78%, #fff 6%), color-mix(in srgb, var(--fc) 72%, #000) 100%); }
 .burst::after { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.3), transparent 40%), radial-gradient(circle at 75% 70%, rgba(255,255,255,.2), transparent 38%); filter: blur(30px); }
-.grain { position: absolute; inset: 0; pointer-events: none; opacity: .09; mix-blend-mode: overlay; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
+.grain { position: absolute; inset: 0; z-index: 4; pointer-events: none; opacity: .09; mix-blend-mode: overlay; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
 
 .disc { position: absolute; left: 50%; border-radius: 50%; transform: translateX(-50%); pointer-events: none;
   background: radial-gradient(ellipse at 50% 45%, #050505 0 24%, transparent 25%), conic-gradient(from 20deg, #2a2c27, #c9ccc0, #55584f, #e8eadf, #3a3d35, #b9bcb0, #2a2c27);
@@ -49,7 +49,13 @@ a { color: inherit; }
 .disc.dtop { top: -62px; width: min(320px, 44vw); height: 150px; background: radial-gradient(ellipse at 50% 62%, #040404 0 30%, transparent 31%), conic-gradient(from 20deg, #1b1d19, #cfd2c6, #4a4d44, #f0f2e8, #34372f, #aeb1a6, #1b1d19); }
 .disc.dbot { bottom: calc(11.5vh + 24px); width: min(320px, 48vw); height: 104px; opacity: .55; }
 
-.can-layer { position: absolute; inset: 0; }
+.can-layer { position: absolute; inset: 0; z-index: 1; }
+/* spotlight: everything is shaded except one lit area that follows the current info block */
+.shade { position: absolute; inset: 0; z-index: 2; pointer-events: none; opacity: 0; --lx: 50%; --ly: 50%; --rx: 300px; --ry: 200px;
+  --tg: linear-gradient(270deg, rgba(0,0,0,.62), rgba(0,0,0,0) 46%);
+  background: radial-gradient(ellipse calc(var(--rx) * .8) calc(var(--ry) * .8) at var(--lx) var(--ly), color-mix(in srgb, var(--fc) 18%, transparent), transparent 72%),
+    var(--tg),
+    radial-gradient(ellipse var(--rx) var(--ry) at var(--lx) var(--ly), rgba(0,0,0,0) 0%, rgba(0,0,0,0) 58%, rgba(0,0,0,.5) 80%, rgba(0,0,0,.84) 100%); }
 .can { position: absolute; left: 50%; top: 50%; font-size: var(--w, 112px); will-change: transform, opacity, filter; cursor: pointer; }
 .can img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; display: block; user-select: none; -webkit-user-drag: none; pointer-events: none; }
 .gs { position: absolute; left: 6%; right: 6%; bottom: -.05em; height: .14em; border-radius: 50%; background: radial-gradient(ellipse, rgba(0,0,0,.7), transparent 70%); pointer-events: none; }
@@ -67,7 +73,7 @@ a { color: inherit; }
 .plabel span { font-size: .075em; font-weight: 700; }
 .plabel em { font-style: normal; font-family: var(--latin); font-size: .11em; color: #15795f; }
 
-.hud { position: absolute; inset: 0; pointer-events: none; }
+.hud { position: absolute; inset: 0; pointer-events: none; z-index: 3; }
 .hud > * { pointer-events: auto; }
 .flavname { position: absolute; left: 0; right: 0; bottom: 11vh; text-align: center; font-size: clamp(26px, 3.2vw, 46px); text-shadow: 0 2px 14px rgba(0,0,0,.7); pointer-events: none; direction: rtl; }
 .flavname span { display: inline-block; }
@@ -75,7 +81,7 @@ a { color: inherit; }
 .flavname.snap span { animation: snap .38s cubic-bezier(.2,1.5,.4,1); }
 @keyframes snap { 0% { transform: translateY(26px) scale(.92); opacity: 0; filter: blur(6px); } 100% { transform: none; opacity: 1; filter: none; } }
 .spectrum { position: absolute; left: 50%; bottom: 5.4vh; width: min(42vw, 480px); transform: translateX(-50%); height: 18px; }
-.spectrum::before { content: ""; position: absolute; left: 0; right: 0; top: 8px; height: 2px; border-radius: 2px; background: linear-gradient(270deg, #6cc24a, #3a9bff, #ee3b34, #e8b02a, #27c29a); }
+.spectrum::before { content: ""; position: absolute; left: 0; right: 0; top: 8px; height: 2px; border-radius: 2px; background: var(--spec, linear-gradient(270deg, #e0262b, #4fbf8a)); }
 .dot { position: absolute; top: 2px; width: 14px; height: 14px; margin-left: -7px; border-radius: 50%; background: var(--fc); box-shadow: 0 0 0 3px rgba(255,255,255,.18), 0 0 16px var(--fc); transition: left .45s cubic-bezier(.2,1.2,.3,1); }
 .hint { position: absolute; left: 0; right: 0; bottom: 1.8vh; text-align: center; font-size: 12px; color: var(--muted); direction: rtl; }
 .arrow { position: absolute; top: 46%; width: 44px; height: 44px; margin-top: -22px; display: grid; place-items: center; color: rgba(255,255,255,.7); font-size: 22px; transition: transform .2s; }
@@ -84,7 +90,7 @@ a { color: inherit; }
 .arrow.r { left: calc(50% + 12vw - 22px); }
 
 /* spotlight panels */
-.facts { position: absolute; inset: 0; pointer-events: none; opacity: 0; }
+.facts { position: absolute; inset: 0; pointer-events: none; opacity: 0; z-index: 3; }
 .fact { position: absolute; right: clamp(20px, 6vw, 90px); top: 50%; width: min(33vw, 440px); transform: translateY(-46%); opacity: 0; transition: opacity .18s ease, transform .3s cubic-bezier(.2,1.4,.4,1); pointer-events: none; direction: rtl; text-align: right; }
 .fact.on { opacity: 1; transform: translateY(-50%); }
 .fact .chip { display: inline-block; margin-bottom: 14px; padding: 2px 12px; font-size: 13px; font-weight: 700; color: #07100a; background: color-mix(in srgb, var(--fc) 62%, #fff); border-radius: 3px; }
@@ -110,9 +116,8 @@ a { color: inherit; }
 .hdr > * { pointer-events: auto; }
 .demo { font-size: 12px; font-weight: 600; color: var(--muted); padding: 7px 0; direction: rtl; }
 .demo::before { content: ""; display: inline-block; width: 7px; height: 7px; margin-left: 8px; border-radius: 50%; background: var(--fc); box-shadow: 0 0 10px var(--fc); }
-.mark { position: absolute; left: 50%; top: 18px; transform: translateX(-50%); text-align: center; text-decoration: none; display: block; line-height: .8; filter: drop-shadow(0 4px 10px rgba(0,0,0,.7)); }
-.mark b { display: block; padding: 0 .14em 0 .06em; font-family: var(--latin); font-style: italic; font-weight: 400; font-size: 34px; transform: skewX(-9deg); background: linear-gradient(180deg, #fff, #c9ccc0 55%, #fff); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.mark span { display: block; padding: 0 .14em 0 .06em; font-family: var(--latin); font-style: italic; font-size: 20px; transform: skewX(-9deg); color: var(--fc); margin-top: 2px; transition: color .6s; }
+.mark { position: absolute; left: 50%; top: 12px; transform: translateX(-50%); text-align: center; text-decoration: none; display: block; line-height: 0; filter: drop-shadow(0 4px 10px rgba(0,0,0,.7)); }
+.mark img { display: block; height: 64px; width: auto; }
 .right { display: flex; align-items: flex-start; gap: 22px; }
 .menu-btn { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; padding: 7px 0; color: var(--muted); direction: rtl; }
 .menu-btn:hover { color: #fff; }
@@ -125,8 +130,8 @@ a { color: inherit; }
 .menu a:hover { color: #fff; transform: translateX(-4px); }
 .progress { position: fixed; z-index: 65; top: 0; left: 0; height: 2px; width: 100%; transform-origin: left; transform: scaleX(0); background: linear-gradient(90deg, transparent, #fff); }
 .corner { position: fixed; z-index: 40; width: 10px; height: 10px; border: 0 solid rgba(255,255,255,.35); pointer-events: none; }
-.corner.a { left: clamp(14px, 3.5vw, 48px); top: 82px; border-left-width: 1px; border-top-width: 1px; }
-.corner.b { right: clamp(14px, 3.5vw, 48px); top: 82px; border-right-width: 1px; border-top-width: 1px; }
+.corner.a { left: clamp(14px, 3.5vw, 48px); top: 96px; border-left-width: 1px; border-top-width: 1px; }
+.corner.b { right: clamp(14px, 3.5vw, 48px); top: 96px; border-right-width: 1px; border-top-width: 1px; }
 .corner.c { left: clamp(14px, 3.5vw, 48px); bottom: 26px; border-left-width: 1px; border-bottom-width: 1px; }
 .corner.d { right: clamp(14px, 3.5vw, 48px); bottom: 26px; border-right-width: 1px; border-bottom-width: 1px; }
 
@@ -241,8 +246,7 @@ a { color: inherit; }
   background: radial-gradient(ellipse 80% 70% at 50% 60%, color-mix(in srgb, var(--fc) 55%, #000), var(--fd) 60%, #020402 100%); }
 .curtain::before { content: ""; position: absolute; left: 0; right: 0; top: -2px; height: 2px; background: #fff; box-shadow: 0 0 24px 4px var(--fc); }
 .curtain .cm { text-align: center; line-height: .8; opacity: 0; transform: translateY(14px) scale(.96); transition: opacity .35s .15s, transform .5s .15s cubic-bezier(.2,1.4,.4,1); }
-.curtain .cm b { display: block; font-family: var(--latin); font-style: italic; font-weight: 400; font-size: clamp(44px, 9vw, 96px); color: #fff; transform: skewX(-9deg); }
-.curtain .cm span { display: block; margin-top: 4px; font-family: var(--latin); font-style: italic; font-size: clamp(26px, 5vw, 54px); color: color-mix(in srgb, var(--fc) 40%, #fff); transform: skewX(-9deg); }
+.curtain .cm img { display: block; height: clamp(110px, 24vw, 220px); width: auto; margin: 0 auto; filter: drop-shadow(0 6px 24px rgba(0,0,0,.55)); }
 .curtain.cover { visibility: visible; transform: none; transition: transform .62s cubic-bezier(.76,0,.24,1); }
 .curtain.cover .cm { opacity: 1; transform: none; }
 .curtain.leave { visibility: visible; transform: translateY(-101%); transition: transform .7s cubic-bezier(.76,0,.24,1); }
@@ -260,16 +264,17 @@ a { color: inherit; }
   .arrow.l { left: 6px; } .arrow.r { left: auto; right: 6px; }
   .demo, .menu-btn span { display: none; }
   .hdr { padding-left: 14px; padding-right: 14px; }
-  .mark { left: auto; right: 14px; transform: none; top: 14px; }
+  .mark { left: auto; right: 14px; transform: none; top: 10px; }
   .right { gap: 6px; align-items: center; }
   .menu-btn { padding: 12px 10px; }
   .cta { padding: 8px 13px; font-size: 13px; }
   .menu { right: auto; left: 14px; transform-origin: top left; width: min(220px, calc(100vw - 28px)); }
   .arrow { display: none; }
+  .shade { --tg: linear-gradient(0deg, rgba(0,0,0,.78), rgba(0,0,0,0) 58%); }
   .corner.a, .corner.b { top: 76px; }
   .flavname { bottom: 12vh; }
   .where, .join, .faq { padding-left: 16px; padding-right: 16px; }
-  .mark b { font-size: 28px; } .mark span { font-size: 17px; }
+  .mark img { height: 50px; }
   .faq-head h2 { font-size: 20vw; }
   .faq-head p { position: static; text-align: right; margin-top: 16px; }
   .spectrum { width: 64vw; }
@@ -284,7 +289,7 @@ a { color: inherit; }
 
 <header class="hdr">
   <div class="demo">نسخة مبدئية للعرض</div>
-  <a class="mark" href="#top" aria-label="أجرونوفا، الصفحة الرئيسية"><b>AGRO</b><span>NOVA</span></a>
+  <a class="mark" href="#top" aria-label="مصر الدولية، الصفحة الرئيسية"><img src="img/logo.png" alt="مصر الدولية A3" width="211" height="173"></a>
   <div class="right">
     <button class="menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="menu"><svg viewBox="0 0 9 9" aria-hidden="true"><rect width="3" height="3"/><rect x="6" width="3" height="3"/><rect y="6" width="3" height="3"/><rect x="6" y="6" width="3" height="3"/></svg><span>القائمة</span></button>
     <a class="cta" href="#join">تواصل معنا</a>
@@ -301,6 +306,7 @@ a { color: inherit; }
     <div class="disc dtop" id="discTop"></div>
     <div class="slogan" id="slogan" aria-hidden="true"><div class="disp" id="sl1">أرض أغنى</div><div class="disp" id="sl2">محصول أوفر</div></div>
     <div class="can-layer" id="cans"></div>
+    <div class="shade" id="shade"></div>
     <div class="hud" id="hud">
       <button class="arrow l" id="next" type="button" aria-label="المنتج التالي">&#8249;&#8249;</button>
       <button class="arrow r" id="prev" type="button" aria-label="المنتج السابق">&#8250;&#8250;</button>
@@ -315,9 +321,9 @@ a { color: inherit; }
       <article class="fact" data-i="2"></article>
       <article class="fact" data-i="3"></article>
       <div class="rail" id="rail" role="tablist" aria-label="تفاصيل المنتج">
-        <button type="button" data-f="1" aria-label="المواصفات الفنية"><svg viewBox="0 0 24 24"><path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.8 3h10.4A2 2 0 0 0 19 18l-5-9V3"/><path d="M7.500 15h9"/></svg></button>
-        <button type="button" data-f="2" aria-label="العبوة والتغليف"><svg viewBox="0 0 24 24"><path d="M3 8l9-5 9 5v8l-9 5-9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg></button>
-        <button type="button" data-f="3" aria-label="الاستخدام والتخزين"><svg viewBox="0 0 24 24"><path d="M12 21V10"/><path d="M12 15c-4.500 0-6.500-2.500-6.500-6 4.500 0 6.500 2.500 6.500 6zM12 12c3.500 0 5.500-2 5.500-5.500-3.500 0-5.500 2-5.500 5.500z"/></svg></button>
+        <button type="button" data-f="1" aria-label="التركيب"><svg viewBox="0 0 24 24"><path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.8 3h10.4A2 2 0 0 0 19 18l-5-9V3"/><path d="M7.500 15h9"/></svg></button>
+        <button type="button" data-f="2" aria-label="المميزات"><svg viewBox="0 0 24 24"><path d="M3 8l9-5 9 5v8l-9 5-9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg></button>
+        <button type="button" data-f="3" aria-label="العبوة والشركة"><svg viewBox="0 0 24 24"><path d="M12 21V10"/><path d="M12 15c-4.500 0-6.500-2.500-6.500-6 4.500 0 6.500 2.500 6.500 6zM12 12c3.500 0 5.500-2 5.500-5.500-3.500 0-5.500 2-5.500 5.500z"/></svg></button>
       </div>
     </div>
     <div class="grain"></div>
@@ -339,7 +345,7 @@ a { color: inherit; }
   <div class="chips" id="govChips"><button type="button" data-g="cairo">القاهرة</button><button type="button" data-g="giza">الجيزة</button><button type="button" data-g="alex">الإسكندرية</button><button type="button" data-g="beheira">البحيرة</button><button type="button" data-g="sharqia">الشرقية</button><button type="button" data-g="minya">المنيا</button><button type="button" data-g="fayoum">الفيوم</button><button type="button" data-g="asyut">أسيوط</button></div>
   <div class="mapwrap">
     <div class="map" id="map">
-      <svg id="egy" viewBox="0 0 1100 1000" preserveAspectRatio="xMidYMid meet" role="img" aria-label="خريطة مصر ومناديب أجرونوفا">
+      <svg id="egy" viewBox="0 0 1100 1000" preserveAspectRatio="xMidYMid meet" role="img" aria-label="خريطة مصر ومناديب مصر الدولية">
         <defs>
           <pattern id="gridp" width="55" height="55" patternUnits="userSpaceOnUse"><path d="M55 0H0V55" fill="none" class="gridl"/></pattern>
           <linearGradient id="landfill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3dff7a" stop-opacity=".16"/><stop offset="1" stop-color="#3dff7a" stop-opacity=".05"/></linearGradient>
@@ -361,7 +367,7 @@ a { color: inherit; }
       </div>
       <aside class="rep" id="rep" aria-live="polite"></aside>
     </div>
-    <p class="map-hint">اضغط على الدبوس الأحمر أو على اسم المحافظة، أو كبّر الخريطة، لعرض بيانات المندوب. (Ctrl + عجلة الماوس للتكبير)</p>
+    <p class="map-hint">اضغط على الدبوس الأحمر أو على اسم المحافظة لعرض بيانات المندوب. للتقريب: اضغط على أي مكان في الخريطة، أو اقرص بإصبعين. (Ctrl + عجلة الماوس على الكمبيوتر)</p>
   </div>
 </section>
 
@@ -377,55 +383,115 @@ a { color: inherit; }
   </form>
 </section>
 </main>
-<footer class="foot"><a href="#top">واتساب</a><a href="#top">فيسبوك</a><a href="#top">سياسة الخصوصية</a><a href="#top">الشروط والأحكام</a><span>&copy; 2026 أجرونوفا (اسم تجريبي)</span>
+<footer class="foot"><a href="#top">واتساب</a><a href="#top">فيسبوك</a><a href="#top">سياسة الخصوصية</a><a href="#top">الشروط والأحكام</a><span>&copy; 2026 مصر الدولية</span>
   <div class="loopcue" id="loopcue" aria-hidden="true"><span><i class="ar">&#8595;</i> مرّر للأسفل مرة أخرى للعودة إلى البداية</span><div class="bar"><i></i></div></div>
 </footer>
-<div class="curtain" id="curtain" aria-hidden="true"><div class="cm"><b>AGRO</b><span>NOVA</span></div></div>
+<div class="curtain" id="curtain" aria-hidden="true"><div class="cm"><img src="img/logo.png" alt="" width="211" height="173"></div></div>
 </div>
 
 <script>
 (function () {
   // Demo content. Names, sizes and values are examples built from the client's spec sheet.
   var P = [
-    { k: 'bag', img: 'img/bag.webp', ar: 0.648, H: 2.4, sp: 0.8, c: '#6cc24a', d: '#12320d',
-      l1: 'سماد محبب', l2: 'NPK 20-20-20', sub: 'شكاير الأسمدة الصلبة · 25 / 50 كجم',
-      intro: 'سماد مركّب متوازن للتسميد الأرضي. حبيباته ثابتة ولا تتكتل داخل الشيكارة.', tags: ['25 كجم', '50 كجم', 'تسميد أرضي'],
-      specs: [['التركيب', 'NPK 20-20-20 (يوريا / نترات / أمونيوم)'], ['الذوبان', 'بطيء للتسميد الأرضي، أو تام الذوبان لأسمدة الري'], ['الرطوبة', 'أقل من 1% لمنع التحجر والتكتل']],
-      pack: [['الخامة', 'بولي بروبيلين منسوج (PP Woven) عالي المتانة'], ['البطانة', 'كيس داخلي PE يحمي السماد من الرطوبة'], ['الأوزان', '25 كجم أو 50 كجم صافي']],
-      use: [['الإضافة', 'نثر يدوي، تسميد أرضي، أو حقن مع التنقيط'], ['المعدل', 'كجم لكل فدان حسب المحصول وعمر النبات'], ['التخزين', 'على طبالي خشب في مكان جاف جيد التهوية']] },
-    { k: 'jerry', img: 'img/jerrycan.webp', ar: 0.623, H: 2.3, sp: 0.78, c: '#3a9bff', d: '#0a2650',
-      l1: 'أحماض أمينية', l2: 'سائلة 25%', sub: 'جراكن الأسمدة السائلة · 1 إلى 20 لتر',
-      intro: 'أحماض أمينية حرة وعناصر صغرى مخلبية لتحفيز النمو. للرش الورقي أو الري.', tags: ['1 لتر', '5 لتر', '10 لتر', '20 لتر'],
-      specs: [['المادة الفعالة', 'أحماض أمينية حرة 25% وعناصر صغرى مخلبية'], ['الحموضة pH', 'تحدد أمان الرش على الأوراق وعند الخلط'], ['الكثافة', '1.25 جم/سم³، دليل على جودة الخامات']],
-      pack: [['الخامة', 'HDPE مقاوم للأحماض والأشعة فوق البنفسجية'], ['الغلق', 'غطاء محكم مع طبقة ألومنيوم حرارية'], ['الأحجام', '1 / 5 / 10 / 20 لتر']],
-      use: [['الإضافة', 'رش ورقي أو حقن مع مياه الري'], ['المعدل', 'سم³ لكل 100 لتر ماء، أو لتر لكل فدان'], ['تنبيه', 'لا يخلط مع النحاس أو الكبريت أو الزيوت المعدنية']] },
-    { k: 'jug', img: 'img/jug.webp', ar: 0.784, H: 2.2, sp: 0.78, c: '#ee3b34', d: '#4a0c0a',
-      l1: 'فوسماكس 20', l2: 'فوسفور سائل', sub: 'سائل مركّز 100% · جركن 10 لتر',
-      intro: 'فوسفور مركّز قابل للذوبان في الماء. يقوّي الجذور ويدعم التزهير والعقد.', tags: ['10 لتر', 'سائل 100%', 'ري ورش'],
-      specs: [['الصورة', 'سائل مركّز 100% سريع الذوبان'], ['الغرض', 'فوسفور عالٍ لتقوية الجذور ودعم التزهير'], ['الحموضة pH', 'مكتوبة على النشرة لضمان أمان الخلط']],
-      pack: [['الخامة', 'جركن HDPE أسود يحجب الضوء ومقاوم للكيماويات'], ['الغلق', 'غطاء محكم ضد التسريب (Tamper-evident)'], ['الحجم', '10 لتر']],
-      use: [['الإضافة', 'حقن مع الري بالتنقيط أو رش ورقي'], ['المعدل', 'لتر لكل فدان حسب مرحلة النمو'], ['التخزين', 'في مكان بارد بعيداً عن الشمس المباشرة']] },
-    { k: 'pail', img: 'img/pail.webp', ar: 0.953, H: 1.5, sp: 0.56, c: '#e8b02a', d: '#4a3306',
-      l1: 'مركّز بوتاسيوم', l2: 'عجينة / بودرة', sub: 'بستلات وجرادل التعبئة · 5 إلى 20 كجم',
-      intro: 'عجينة مركّزة أو بودرة قابلة للبلل بنسبة بوتاسيوم عالية. خالية من الكلوريد والصوديوم.', tags: ['5 كجم', '10 كجم', '20 كجم'],
-      specs: [['الصورة', 'عجينة مركّزة (Paste) أو بودرة ناعمة WP'], ['التركيز', 'بوتاسيوم عالٍ وخالٍ من الكلوريد والصوديوم'], ['الذوبان', 'سريع بدون رواسب تسد النقاطات']],
-      pack: [['الخامة', 'بلاستيك PP بيور يتحمل الصدمات والكسر'], ['السهولة', 'غطاء يعاد غلقه ومقبض مقوّى'], ['الأوزان', '5 / 10 / 20 كجم']],
-      use: [['الإضافة', 'تسميد أرضي مع التنقيط والرش والغمر'], ['المعدل', 'كجم لكل فدان حسب التزهير أو التحجيم'], ['التخزين', 'مغلقاً بإحكام تحت 35°م بعيداً عن الشمس']] },
-    { k: 'pouch', img: null, ar: 0.62, H: 1.8, sp: 0.6, c: '#27c29a', d: '#08392c',
-      l1: 'طحالب بحرية', l2: 'محفّز 100%', sub: 'أكياس وعبوات صغيرة · 250 جم إلى 1 كجم',
-      intro: 'مستخلص طحالب بحرية بودرة ميكرونية سريعة الذوبان. يحفّز النمو ويقوّي تحمل الإجهاد.', tags: ['250 جم', '500 جم', '1 كجم'],
-      specs: [['المادة الفعالة', 'طحالب بحرية 100% أو هيوميك أسيد 85%'], ['الصورة', 'بودرة ميكرونية أو قشور سريعة الذوبان'], ['الحموضة pH', 'تذكر بعد الذوبان في الماء']],
-      pack: [['الخامة', 'فويل ألومنيوم متعدد الطبقات يعزل الضوء والرطوبة'], ['الغلق', 'لحام حراري، مع سوستة Zip-lock عند توفرها'], ['الأوزان', '250 جم / 500 جم / 1 كجم']],
-      use: [['المعدل', 'جم لكل 100 لتر ماء للرش، أو جم لكل فدان للري'], ['قبل الحصاد', 'عدد الأيام بين آخر رشة والجمع (PHI)'], ['الاعتماد', 'رقم التسجيل وتاريخ الإنتاج، صلاحية 3 سنوات']] }
+    { k: 'deja', img: 'img/deja.webp', ar: 0.747, H: 2.3, sp: 0.78, c: '#e0262b', d: '#4a0c0a', lw: 0.68, lc: [0.61, 0.62],
+      reg: [[0.60, 0.36, 0.36, 0.07], [0.45, 0.57, 0.2, 0.1], [0.58, 0.65, 0.36, 0.07], [0.61, 0.755, 0.36, 0.06]],
+      l1: 'ديجا باور X', l2: 'منشط نمو', sub: 'جركن 10 لتر · Deja Power X',
+      intro: 'منشط نمو فعال للمجموع الخضري. يجمع النيتروجين والأحماض الأمينية وحمض الهيوميك والفولفيك والعناصر الصغرى.', tags: ['10 لتر', 'ذائب 100% في الماء', 'مصر الدولية'],
+      panels: [['التركيب', [['العناصر الكبرى', 'نيتروجين 5% · أحماض أمينية 10%'], ['الأحماض العضوية', 'هيوميك 5% · فولفيك 2%'], ['العناصر الصغرى', 'حديد 1% · زنك 0.5% · منجنيز 0.5%'], ['أندول', '0.5%']]],
+               ['المميزات', [['الغرض', 'منشط نمو فعال للمجموع الخضري'], ['إضافات', 'مضادات الإجهاد ومنظمات النمو'], ['على العبوة', 'تحسين الإزهار · تحسين التربة · عناصر كبرى وصغرى']]],
+               ['العبوة والشركة', [['الحجم', '10 لتر'], ['الذوبان', '100% ذائب في الماء'], ['الشركة', 'مصر الدولية (A3)']]]] },
+    { k: 'capron', img: 'img/capron.webp', ar: 0.716, H: 2.1, sp: 0.78, c: '#3a6fd8', d: '#0a2050', lw: 0.5, lc: [0.69, 0.4],
+      reg: [[0.64, 0.24, 0.25, 0.09], [0.69, 0.34, 0.24, 0.05], [0.69, 0.45, 0.24, 0.06], [0.70, 0.86, 0.27, 0.07]],
+      l1: 'كبرون', l2: 'نحاس مخلبي 15%', sub: 'علبة 1 كجم · Capron 15%',
+      intro: 'نحاس مخلبي عالي الذوبان في الماء وسهل الإتاحة، مصمم لتزويد النبات بالنحاس بكفاءة.', tags: ['1 كجم', 'نحاس Cu 15%', 'عامل مخلّب 70%'],
+      panels: [['التركيب', [['النحاس (Cu)', '15%'], ['العامل المخلّب', '70%'], ['الصورة', 'نحاس مخلبي (Chelated Copper)']]],
+               ['المميزات', [['الذوبان', 'عالي الذوبان في الماء'], ['الإتاحة', 'سهل الإتاحة للنبات'], ['الغرض', 'إمداد النبات بالنحاس بكفاءة']]],
+               ['العبوة والشركة', [['الوزن الصافي', '1 كجم'], ['الاسم التجاري', 'A3 CAPRON (إيه ثري كبرون)'], ['الشركة', 'مصر الدولية']]]] },
+    { k: 'area', img: 'img/area.webp', ar: 0.787, H: 2.0, sp: 0.72, c: '#a23cc0', d: '#2a0a40', lw: 0.8, lc: [0.5, 0.5],
+      reg: [[0.49, 0.24, 0.4, 0.1], [0.55, 0.567, 0.3, 0.08], [0.5, 0.735, 0.38, 0.06], [0.5, 0.86, 0.4, 0.06]],
+      l1: 'إيريا فيد', l2: 'عالي البوتاسيوم', sub: 'شيكارة 10 كجم · Area-Feed',
+      intro: 'سماد ذائب في الماء عالي البوتاسيوم، مناسب لكل المحاصيل.', tags: ['10 كجم', 'مناسب لكل المحاصيل', 'ذائب في الماء'],
+      panels: [['التركيب', [['نيتروجين (N)', '12%'], ['فوسفور (P)', '12%'], ['بوتاسيوم (K)', '36%'], ['حديد (Fe)', '1%']]],
+               ['المميزات', [['التحجيم', 'تحجيم مثالي للثمار بمواصفات تصديرية عالية'], ['الجودة', 'خامات خاصة وتصنيع بجودة ممتازة'], ['الهدف', 'حصاد أفضل']]],
+               ['العبوة والشركة', [['الوزن الصافي', '10 كجم'], ['الصورة', 'سماد ذائب في الماء'], ['الشركة', 'مصر الدولية (A3)']]]] },
+    { k: 'megan', img: 'img/megan.webp', ar: 0.631, H: 2.3, sp: 0.78, c: '#c8a46a', d: '#3d2a10', lw: 0.55, lc: [0.65, 0.3],
+      reg: [[0.55, 0.2, 0.4, 0.09], [0.65, 0.3, 0.27, 0.05], [0.65, 0.43, 0.27, 0.06], [0.53, 0.92, 0.45, 0.05]],
+      l1: 'ميجان', l2: 'مستخلص طحالب', sub: 'كيس 100 جم · Megan',
+      intro: 'مستخلص طحالب بحرية بألجينات البوتاسيوم 16%، يحسّن البيئة حول الجذور.', tags: ['100 جم', 'ألجينات بوتاسيوم 16%', 'طحالب بحرية'],
+      panels: [['التركيب', [['المادة الفعالة', 'ألجينات البوتاسيوم'], ['التركيز', '16%'], ['المصدر', 'مستخلص طحالب بحرية']]],
+               ['المميزات', [['الأثر', 'يحسّن البيئة حول الجذور'], ['المصدر', 'مستخلص طحالب بحرية (Seaweed Extract)']]],
+               ['العبوة والشركة', [['الوزن الصافي', '100 جم'], ['الشركة', 'مصر الدولية (A3)']]]] },
+    { k: 'calford', img: 'img/calford.webp', ar: 0.376, H: 2.5, sp: 0.8, c: '#4fbf8a', d: '#0c3a26', lw: 0.77, lc: [0.62, 0.55],
+      reg: [[0.62, 0.36, 0.38, 0.06], [0.62, 0.47, 0.36, 0.05], [0.6, 0.55, 0.38, 0.045], [0.62, 0.82, 0.38, 0.09]],
+      l1: 'كال فورد', l2: 'كالسيوم وبورون', sub: 'عبوة 1 لتر · Cal Ford',
+      intro: 'كالسيوم 16% مع ماغنسيوم 5% وبورون 1%، بجودة عالية في التصنيع ودقة في الخامات.', tags: ['1 لتر', 'كالسيوم Ca 16%', 'ذائب 100% في الماء'],
+      panels: [['التركيب', [['كالسيوم (Ca)', '16%'], ['ماغنسيوم (Mg)', '5%'], ['بورون (B)', '1%']]],
+               ['المميزات', [['الجودة', 'جودة عالية في التصنيع'], ['الدقة', 'دقة في الخامات'], ['على العبوة', 'تحسين الإزهار · تحسين التربة · عناصر كبرى وصغرى']]],
+               ['العبوة والشركة', [['الحجم', '1 لتر'], ['الذوبان', '100% ذائب في الماء'], ['الاسم التجاري', 'A3 CAL FORD']]]] },
+    { k: 'curforco', img: 'img/curforco.webp', ar: 0.376, H: 2.5, sp: 0.8, c: '#2bb3e6', d: '#06304a', lw: 0.65, lc: [0.6, 0.55],
+      reg: [[0.55, 0.375, 0.3, 0.06], [0.6, 0.452, 0.35, 0.03], [0.55, 0.515, 0.35, 0.04], [0.62, 0.79, 0.38, 0.09]],
+      l1: 'سي يو فورس', l2: 'نحاس جلوكونات 5%', sub: 'عبوة 1 لتر · CU-FORCO',
+      intro: 'نحاس جلوكونات بتركيز 5%، مبيد فطري وقائي وعلاجي.', tags: ['1 لتر', 'نحاس 5%', 'وقائي وعلاجي'],
+      panels: [['التركيب', [['نحاس جلوكونات', '5%'], ['الصورة', 'Copper Gluconate']]],
+               ['المميزات', [['النوع', 'مبيد فطري'], ['التأثير', 'وقائي وعلاجي']]],
+               ['العبوة والشركة', [['الحجم', '1 لتر'], ['الذوبان', '100% ذائب في الماء'], ['الشركة', 'مصر الدولية (A3)']]]] },
+    { k: 'maxcopper', img: 'img/maxcopper.webp', ar: 0.392, H: 2.5, sp: 0.8, c: '#4a5ca8', d: '#0b1130', lw: 0.72, lc: [0.62, 0.55],
+      reg: [[0.6, 0.355, 0.36, 0.06], [0.6, 0.455, 0.32, 0.05], [0.6, 0.52, 0.38, 0.045], [0.6, 0.78, 0.38, 0.09]],
+      l1: 'ماكس كوبر', l2: 'نحاس 10%', sub: 'عبوة 1 لتر · Max Copper',
+      intro: 'مركب نحاس عضوي مخلّب على أحماض عضوية وأحماض أمينية.', tags: ['1 لتر', 'نحاس 10%', 'كبريت 5.2%'],
+      panels: [['التركيب', [['النحاس (Cu)', '10%'], ['الكبريت (S)', '5.2%']]],
+               ['المميزات', [['الصورة', 'مركب نحاس عضوي مخلّب'], ['الأساس', 'أحماض عضوية وأحماض أمينية']]],
+               ['العبوة والشركة', [['الحجم', '1 لتر'], ['الذوبان', '100% ذائب في الماء'], ['الشركة', 'مصر الدولية (A3)']]]] },
+    { k: 'zink', img: 'img/zink.webp', ar: 0.392, H: 2.5, sp: 0.8, c: '#c23a2e', d: '#3f0b0a', lw: 0.72, lc: [0.6, 0.55],
+      reg: [[0.55, 0.38, 0.3, 0.06], [0.6, 0.455, 0.3, 0.035], [0.58, 0.51, 0.35, 0.05], [0.6, 0.82, 0.38, 0.07]],
+      l1: 'زنك', l2: 'EDTA 8%', sub: 'عبوة 1 لتر · Zink 8%',
+      intro: 'مركب فريد بتركيز عالٍ من الزنك المخلّب بالكامل على صورة EDTA.', tags: ['1 لتر', 'زنك 8%', 'EDTA'],
+      panels: [['التركيب', [['الزنك (Zn)', '8%'], ['الصورة', 'Zinc EDTA']]],
+               ['المميزات', [['التركيز', 'تركيز عالٍ من الزنك'], ['التخليب', 'مخلّب بالكامل على صورة EDTA']]],
+               ['العبوة والشركة', [['الحجم', '1 لتر'], ['الذوبان', '100% ذائب في الماء'], ['الشركة', 'مصر الدولية (A3)']]]] },
+    { k: 'growforce', img: 'img/growforce.webp', ar: 0.442, H: 2.6, sp: 0.8, c: '#f07a45', d: '#4a1c08', lw: 0.5, lc: [0.7, 0.3],
+      reg: [[0.63, 0.19, 0.28, 0.05], [0.68, 0.265, 0.25, 0.04], [0.68, 0.335, 0.3, 0.04], [0.75, 0.77, 0.3, 0.05]],
+      l1: 'جرو فورس', l2: 'حديد وماغنسيوم', sub: 'كيس 1 كجم · Grow Force',
+      intro: 'تركيبة مخلّبة من الحديد والماغنسيوم.', tags: ['1 كجم', 'حديد مخلّب 8%', 'ماغنسيوم 8%'],
+      panels: [['التركيب', [['حديد مخلّب', '8%'], ['ماغنسيوم', '8%'], ['حمض ستريك', '3%']]],
+               ['المميزات', [['الصورة', 'تركيبة مخلّبة'], ['العناصر', 'حديد وماغنسيوم']]],
+               ['العبوة والشركة', [['الوزن الصافي', '1 كجم'], ['الشركة', 'مصر الدولية (A3)']]]] },
+    { k: 'cozaro', img: 'img/cozaro.webp', ar: 0.442, H: 2.6, sp: 0.8, c: '#e04552', d: '#4a0c14', lw: 0.5, lc: [0.7, 0.3],
+      reg: [[0.63, 0.195, 0.28, 0.05], [0.66, 0.265, 0.25, 0.05], [0.67, 0.335, 0.3, 0.04], [0.75, 0.77, 0.3, 0.05]],
+      l1: 'كوزارو فورس', l2: 'كالسيوم وبورون', sub: 'كيس 1 كجم · Cozaro Force',
+      intro: 'مركب عضوي من الكالسيوم والبورون يستخدم لتقوية ودعم الشتلات.', tags: ['1 كجم', 'كالسيوم أسيتات 26%', 'بورون 3%'],
+      panels: [['التركيب', [['كالسيوم أسيتات', '26%'], ['زنك أسيتات', '2%'], ['بورون (B)', '3%']]],
+               ['المميزات', [['النوع', 'مركب عضوي من الكالسيوم والبورون'], ['الاستخدام', 'تقوية ودعم الشتلات']]],
+               ['العبوة والشركة', [['الوزن الصافي', '1 كجم'], ['الشركة', 'مصر الدولية (A3)']]]] },
+    { k: 'phospho', img: 'img/phospho.webp', ar: 0.961, H: 1.75, sp: 0.6, c: '#e8dc14', d: '#4a4306', lw: 0.53, lc: [0.54, 0.5],
+      reg: [[0.54, 0.29, 0.27, 0.06], [0.53, 0.42, 0.22, 0.06], [0.54, 0.52, 0.27, 0.06], [0.54, 0.77, 0.27, 0.08]],
+      l1: 'فوسفو فورس', l2: 'فوسفور 50%', sub: 'بستلة 20 كجم · Phospho Force',
+      intro: 'معلق عالي الفوسفور يحفّز التجذير ويعزز نمو المجموع الجذري.', tags: ['20 كجم', 'فوسفور 50%', 'معلق'],
+      panels: [['التركيب', [['نيتروجين (N)', '12%'], ['فوسفور (P)', '50%'], ['بوتاسيوم (K)', '12%']]],
+               ['المميزات', [['النوع', 'معلق عالي الفوسفور'], ['الأثر', 'تحفيز التجذير وتعزيز نمو الجذور']]],
+               ['العبوة والشركة', [['الوزن الصافي', '20 كجم'], ['الاسم التجاري', 'A3 ECO-FERT PHOSPHORUS'], ['الشركة', 'مصر الدولية']]]] },
+    { k: 'ecoforce', img: 'img/ecoforce.webp', ar: 0.963, H: 1.75, sp: 0.6, c: '#2e8b7e', d: '#062a25', lw: 0.53, lc: [0.54, 0.5],
+      reg: [[0.54, 0.29, 0.27, 0.06], [0.54, 0.41, 0.22, 0.05], [0.55, 0.51, 0.28, 0.06], [0.58, 0.8, 0.3, 0.08]],
+      l1: 'إيكو فورس', l2: 'NPK 24-24-24', sub: 'بستلة 20 كجم · Eco-Force',
+      intro: 'سماد متوازن 24-24-24 يصلح للرش الورقي والتسميد الأرضي.', tags: ['20 كجم', 'NPK 24-24-24', 'رش وتسميد أرضي'],
+      panels: [['التركيب', [['نيتروجين (N)', '24%'], ['فوسفور (P)', '24%'], ['بوتاسيوم (K)', '24%']]],
+               ['المميزات', [['الاستخدام', 'رش ورقي وتسميد أرضي'], ['الميزة', 'سرعة الذوبان والامتصاص']]],
+               ['العبوة والشركة', [['الوزن الصافي', '20 كجم'], ['الشركة', 'مصر الدولية (A3)']]]] },
+    { k: 'pota', img: 'img/pota.webp', ar: 0.962, H: 1.75, sp: 0.6, c: '#b04a62', d: '#2e0e16', lw: 0.53, lc: [0.54, 0.5],
+      reg: [[0.53, 0.29, 0.27, 0.06], [0.53, 0.42, 0.22, 0.06], [0.53, 0.5, 0.28, 0.05], [0.58, 0.8, 0.3, 0.08]],
+      l1: 'بوتا فورس', l2: 'بوتاسيوم 60%', sub: 'بستلة 20 كجم · Pota-Force',
+      intro: 'يرفع كفاءة النبات في امتصاص العناصر الغذائية والاستفادة منها.', tags: ['20 كجم', 'بوتاسيوم 60%'],
+      panels: [['التركيب', [['نيتروجين (N)', '6%'], ['فوسفور (P)', '6%'], ['بوتاسيوم (K)', '60%']]],
+               ['المميزات', [['الأثر', 'رفع كفاءة الامتصاص والاستفادة من العناصر']]],
+               ['العبوة والشركة', [['الوزن الصافي', '20 كجم'], ['الاسم التجاري', 'A3 ECO-FERT POTASSIUM'], ['الشركة', 'مصر الدولية']]]] }
   ];
-  var PANEL = ['المواصفات الفنية', 'العبوة والتغليف', 'الاستخدام والتخزين'];
   var n = P.length;
   var $ = function (id) { return document.getElementById(id); };
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   var root = document.documentElement;
   var cansEl = $('cans'), dot = $('dot'), flavWrap = $('flavname'), flavSpan = flavWrap.querySelector('span'), flavSub = flavWrap.querySelector('small');
   var tint = $('tint'), burst = $('burst'), glow = $('glow'), hud = $('hud'), facts = $('facts'), slogan = $('slogan');
-  var discTop = $('discTop'), journey = $('journey'), hintEl = document.querySelector('.hint');
+  var shade = $('shade'), discTop = $('discTop'), journey = $('journey'), hintEl = document.querySelector('.hint');
   var factEls = [].slice.call(document.querySelectorAll('.fact'));
   var railBtns = [].slice.call(document.querySelectorAll('#rail button'));
   var esc = function (s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;'); };
@@ -438,7 +504,7 @@ a { color: inherit; }
     el.style.margin = (-f.H / 2) + 'em 0 0 ' + (-w / 2) + 'em';
     el.style.setProperty('--c', f.c);
     el.innerHTML = '<i class="gs"></i>' + (f.img
-      ? '<img src="' + f.img + '" alt="' + esc(f.l1 + ' ' + f.l2) + '" draggable="false">'
+      ? '<img src="' + f.img + '" alt="' + esc(f.l1 + ' ' + f.l2) + '" draggable="false" decoding="async">'
       : '<div class="pouch" role="img" aria-label="' + esc(f.l1 + ' ' + f.l2) + '"><i></i><div class="plabel"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21V10"/><path d="M12 15c-4.500 0-6.500-2.500-6.500-6 4.500 0 6.500 2.500 6.500 6zM12 12c3.500 0 5.500-2 5.500-5.500-3.500 0-5.500 2-5.500 5.500z"/></svg><em>SEAWEED</em><b>طحالب بحرية</b><span>100% مستخلص</span></div></div>');
     el.addEventListener('click', function () { if (heroOn() && !looping && performance.now() - clickBlock > 300) openProduct(i); });
     cansEl.appendChild(el);
@@ -447,16 +513,14 @@ a { color: inherit; }
 
   function fillFacts(f, idx) {
     var rows = function (a) { return '<dl class="specs">' + a.map(function (r) { return '<div><dt>' + r[0] + '</dt><dd>' + r[1] + '</dd></div>'; }).join('') + '</dl>'; };
-    var title = f.l1 + '<br>' + f.l2;
-    var pn = PANEL.slice(); if (f.k === 'pouch') pn[2] = 'الاستخدام والبيانات القانونية';
-    factEls[0].innerHTML = '<span class="chip">منتج ' + (idx + 1) + ' من ' + n + '</span><h2 class="disp">' + title + '</h2><p>' + f.intro + '</p><div class="tags">' + f.tags.map(function (t) { return '<span>' + t + '</span>'; }).join('') + '</div>';
-    [f.specs, f.pack, f.use].forEach(function (a, j) {
-      factEls[j + 1].innerHTML = '<span class="chip">' + f.l1 + ' ' + f.l2 + '</span><h2 class="disp">' + pn[j] + '</h2>' + rows(a);
+    factEls[0].innerHTML = '<span class="chip">منتج ' + (idx + 1) + ' من ' + n + '</span><h2 class="disp">' + f.l1 + '<br>' + f.l2 + '</h2><p>' + f.intro + '</p><div class="tags">' + f.tags.map(function (t) { return '<span>' + t + '</span>'; }).join('') + '</div>';
+    f.panels.forEach(function (pa, j) {
+      factEls[j + 1].innerHTML = '<span class="chip">' + f.l1 + ' ' + f.l2 + '</span><h2 class="disp">' + pa[0] + '</h2>' + rows(pa[1]);
     });
   }
 
   var pos = 0, target = 0, vw = innerWidth, vh = innerHeight, W = 112, S = 190;
-  var lastInt = 0, active = -1, factIdx = -1, rotA = -6, tmx = 0, mx = 0;
+  var lastInt = 0, active = -1, factIdx = -1, rotA = -6, tmx = 0, mx = 0, rf = 0;
   var p = 0, t0 = performance.now(), dragging = false, clickBlock = 0, looping = false, autoScroll = false;
 
   function size() {
@@ -492,7 +556,7 @@ a { color: inherit; }
     railBtns.forEach(function (b) { b.classList.toggle('on', +b.dataset.f === k); });
   }
 
-  var rotFor = [-6, 5, -3, 4];
+  var rotFor = [-8, -4, -7, -3];
   var heroTilt = function (i) { return -6 + Math.sin(i * 1.9) * 4; };
 
   function frame(now) {
@@ -523,6 +587,20 @@ a { color: inherit; }
     rotA += (rotT - rotA) * 0.09;
 
     var cy = -vh * 0.04, mob = vw < 720;
+    // zoom + light: the pack is enlarged, panned so the current info area sits under a fixed light, and the shade follows that area
+    var fa = P[idx], cw0 = fa.ar * fa.H * W, ch0 = fa.H * W;
+    var zs = Math.min((mob ? vw * 0.98 : Math.min(vw * 0.4, vh * 0.92)) / (fa.lw * cw0), (mob ? 3 : 2.6) * vh / ch0);
+    var Fx = mob ? vw * 0.5 : vw * 0.34, Fy = mob ? vh * 0.3 : vh * 0.5;
+    var tg = factIdx >= 0 ? factIdx : (p > 0.4 ? 3 : 0);
+    rf += (tg - rf) * 0.1;
+    var ia = Math.min(3, Math.floor(rf)), ib = Math.min(3, ia + 1), fr = Math.min(1, rf - ia), ra = fa.reg[ia], rb = fa.reg[ib];
+    var R = [0, 1, 2, 3].map(function (j) { return ra[j] + (rb[j] - ra[j]) * fr; });
+    var cu = fa.lc[0] + (R[0] - fa.lc[0]) * 0.75, cv = fa.lc[1] + (R[1] - fa.lc[1]) * 0.75;
+    var rr = rotA * Math.PI / 180, co = Math.cos(rr), si = Math.sin(rr);
+    var off = function (u, v) { var ax = (u - 0.5) * cw0 * zs, ay = (v - 0.5) * ch0 * zs; return [ax * co - ay * si, ax * si + ay * co]; };
+    var oC = off(cu, cv), oR = off(R[0], R[1]);
+    var spX = Fx - oC[0] - vw / 2, spY = Fy - oC[1] - vh / 2 - cy;
+    var Lx = Fx + oR[0] - oC[0], Ly = Fy + oR[1] - oC[1];
     for (var i = 0; i < n; i++) {
       var f = P[i], el = cans[i];
       var dRaw = wrapD(i - pos), ad = Math.abs(dRaw);
@@ -542,8 +620,8 @@ a { color: inherit; }
       var ef = 1 - smooth(1.7, 2.45, Math.abs(dH)); // edge fade: the wrap-around jump happens while invisible
       // spotlight
       var spotS = (mob ? Math.min(vh * f.sp * 0.72, vh * 0.4) : vh * f.sp) / base;
-      var sx = isA ? (mob ? 0 : -vw * 0.07) : -dRaw * vw * 0.34, sy = isA ? (mob ? -vh * 0.2 : vh * 0.01) + 38 + bob * 0.4 : 0;
-      var sr = isA ? rotA : -6, ss = isA ? spotS : 1, so = isA ? 1 : 0;
+      var sx = isA ? spX : -dRaw * vw * 0.34, sy = isA ? spY + bob * 0.4 : 0;
+      var sr = isA ? rotA : -6, ss = isA ? zs : 1, so = isA ? 1 : 0;
       // slogan
       var lx = isA ? 0 : -dRaw * vw * 0.34, ly = isA ? vh * 0.02 + bob * 0.4 : 0;
       var lr = isA ? 0 : -6, ls = isA ? spotS * 0.8 : 1, lo = isA ? 1 : 0;
@@ -564,6 +642,10 @@ a { color: inherit; }
       el.style.pointerEvents = wH > 0.6 ? 'auto' : 'none';
     }
 
+    shade.style.opacity = wSp.toFixed(3);
+    shade.style.setProperty('--lx', Lx.toFixed(1) + 'px'); shade.style.setProperty('--ly', Ly.toFixed(1) + 'px');
+    shade.style.setProperty('--rx', Math.max(R[2] * cw0 * zs * 1.7, vw * (mob ? 0.3 : 0.12)).toFixed(1) + 'px');
+    shade.style.setProperty('--ry', Math.max(R[3] * ch0 * zs * 1.9, vh * 0.2).toFixed(1) + 'px');
     hintEl.style.opacity = p < 0.5 ? '' : '0';
     hud.style.opacity = wH.toFixed(3);
     hud.style.visibility = wH < 0.02 ? 'hidden' : 'visible';
@@ -695,12 +777,12 @@ a { color: inherit; }
 
   // FAQ
   var Q = [
-    ['ما الفرق بين السماد المحبب والسماد السائل؟', 'المحبب يضاف للتربة نثراً أو تسميداً أرضياً ويتحلل تدريجياً. السائل يضاف مع مياه الري أو رشاً على الأوراق، فيصل للنبات أسرع.'],
+    ['ما الفرق بين المنتجات السائلة والبودرة؟', 'السائل مثل ديجا باور X وكال فورد يباع باللتر. البودرة الذائبة مثل كبرون وإيريا فيد وميجان تباع بالكيلو أو الجرام. طريقة الإضافة تحدد حسب المنتج والمحصول.'],
     ['كيف أعرف معدل الاستخدام المناسب؟', 'المعدل يحدد بالكيلوجرام أو اللتر لكل فدان حسب المحصول وعمر النبات ومرحلة النمو. على كل عبوة جدول معدلات، ويمكن للمهندس الزراعي ضبطه لأرضك.'],
     ['هل يمكن خلط الأسمدة السائلة مع المبيدات؟', 'لا تخلط أي منتج مع النحاس أو الكبريت أو الزيوت المعدنية قبل قراءة تنبيه الخلط على العبوة. جرّب الخلط أولاً على كمية صغيرة.'],
-    ['ما معنى فترة ما قبل الحصاد (PHI)؟', 'هي عدد الأيام بين آخر رشة وجمع المحصول. تهم مزارعي التصدير بشكل خاص، وتكتب على عبوة كل محفز.'],
-    ['كيف أخزن الأسمدة بشكل صحيح؟', 'الشكاير على طبالي خشب في مكان جاف جيد التهوية. البستلات والجراكن بعيداً عن الشمس وتحت 35°م، مع إحكام الغلق بعد كل استخدام.'],
-    ['لماذا يوجد كيس داخل الشيكارة؟', 'هو بطانة بولي إيثيلين تحمي السماد من الرطوبة، فلا يتحجر ولا يتكتل وتبقى رطوبته أقل من 1%.'],
+    ['ما معنى فترة ما قبل الحصاد (PHI)؟', 'هي عدد الأيام بين آخر رشة وجمع المحصول. تهم مزارعي التصدير بشكل خاص، ويحددها المهندس الزراعي حسب المحصول.'],
+    ['كيف أخزن الأسمدة بشكل صحيح؟', 'في مكان جاف جيد التهوية بعيداً عن الشمس المباشرة، مع إحكام الغلق بعد كل استخدام.'],
+    ['ما معنى النحاس المخلبي؟', 'المخلّب مادة تحيط بعنصر النحاس وتبقيه ذائباً ومتاحاً للنبات. وهذا ما يصفه كبرون على عبوته: عالي الذوبان وسهل الإتاحة.'],
     ['هل المنتجات مسجلة بوزارة الزراعة؟', 'بيانات التسجيل وتاريخ الإنتاج ومدة الصلاحية تطبع على العبوة. في هذه النسخة المبدئية هي نصوص توضيحية فقط.'],
     ['كيف أطلب كميات لمشروع أو جمعية؟', 'اترك رقمك في قسم طلب عرض السعر، وسيتواصل معك فريق المبيعات بالأسعار والكميات المتاحة وطرق التوصيل.']
   ];
@@ -746,6 +828,7 @@ a { color: inherit; }
   fitFaq(); addEventListener('resize', fitFaq);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitFaq);
 
+  root.style.setProperty('--spec', 'linear-gradient(270deg,' + P.map(function (f) { return f.c; }).join(',') + ')');
   size(); addEventListener('resize', size);
   setActive(0);
   requestAnimationFrame(frame);
@@ -893,7 +976,6 @@ a { color: inherit; }
   $('mZout').addEventListener('click', function () { zoomBtn(1 / 1.8); });
   $('mReset').addEventListener('click', function () { hidePanel(true); flyTo(W0 / 2, H0 / 2, 1, 800); });
   addEventListener('keydown', function (e) { if (e.key === 'Escape' && panel.classList.contains('open')) hidePanel(true); });
-  svg.addEventListener('dblclick', function (e) { if (e.target.closest('.pin')) return; var t = zoomAt(e.clientX, e.clientY, view.k * 2.2); flyTo(t.x, t.y, t.k, 450, autoPanel); });
   var wt = 0;
   svg.addEventListener('wheel', function (e) {
     if (!(e.ctrlKey || e.metaKey)) return;
@@ -903,28 +985,38 @@ a { color: inherit; }
     clearTimeout(wt); wt = setTimeout(autoPanel, 180);
   }, { passive: false });
 
-  // drag to pan + pinch to zoom (only once zoomed in, so the page still scrolls normally on phones)
-  var ptrs = {}, pinch = null;
+  // touch / mouse: tap = zoom in a step, pinch = zoom, drag = pan (when zoomed). Works from the first view.
+  var ptrs = {}, pinch = null, tap = null;
+  mapEl.addEventListener('touchstart', function (e) { if (e.touches.length > 1 && !e.target.closest('.rep, .mctl')) e.preventDefault(); }, { passive: false });
+  mapEl.addEventListener('touchmove', function (e) { if (e.touches.length > 1 && !e.target.closest('.rep, .mctl')) e.preventDefault(); }, { passive: false });
   svg.addEventListener('pointerdown', function (e) {
-    if (e.target.closest('.pin') || view.k <= 1.05) return;
+    if (e.target.closest('.pin') || (e.pointerType === 'mouse' && e.button !== 0)) return;
     ptrs[e.pointerId] = { x: e.clientX, y: e.clientY }; try { svg.setPointerCapture(e.pointerId); } catch (_) {}
     cancelAnimationFrame(anim);
     var ids = Object.keys(ptrs);
-    if (ids.length === 2) { var a = ptrs[ids[0]], b = ptrs[ids[1]]; pinch = { d0: Math.hypot(a.x - b.x, a.y - b.y), k0: view.k }; }
+    if (ids.length === 1) tap = { x: e.clientX, y: e.clientY, t: performance.now(), ok: true };
+    else { tap = null; var a = ptrs[ids[0]], b = ptrs[ids[1]]; pinch = { d0: Math.max(1, Math.hypot(a.x - b.x, a.y - b.y)), k0: view.k }; }
   });
   svg.addEventListener('pointermove', function (e) {
     var p = ptrs[e.pointerId]; if (!p) return;
     var ids = Object.keys(ptrs);
+    if (tap && Math.hypot(e.clientX - tap.x, e.clientY - tap.y) > 8) tap.ok = false;
     if (ids.length === 2 && pinch) {
       ptrs[e.pointerId] = { x: e.clientX, y: e.clientY };
       var a = ptrs[ids[0]], b = ptrs[ids[1]], nd = Math.hypot(a.x - b.x, a.y - b.y);
       var t = clampV(zoomAt((a.x + b.x) / 2, (a.y + b.y) / 2, pinch.k0 * nd / pinch.d0)); view.x = t.x; view.y = t.y; view.k = t.k; apply();
-    } else {
+    } else if (view.k > 1.05 && ids.length === 1) {
       var m = metrics(view); view.x -= (e.clientX - p.x) / m.s; view.y -= (e.clientY - p.y) / m.s; clampV(view);
       p.x = e.clientX; p.y = e.clientY; apply();
     }
   });
-  function up(e) { if (!ptrs[e.pointerId]) return; delete ptrs[e.pointerId]; pinch = null; if (!Object.keys(ptrs).length) autoPanel(); }
+  function up(e) {
+    if (!ptrs[e.pointerId]) return;
+    var wasTap = tap && tap.ok && e.type === 'pointerup' && performance.now() - tap.t < 450 && Object.keys(ptrs).length === 1;
+    delete ptrs[e.pointerId]; pinch = null;
+    if (wasTap) { tap = null; var t = zoomAt(e.clientX, e.clientY, view.k * 1.9); flyTo(t.x, t.y, t.k, 450, autoPanel); return; }
+    if (!Object.keys(ptrs).length) { tap = null; autoPanel(); }
+  }
   svg.addEventListener('pointerup', up); svg.addEventListener('pointercancel', up);
 
   apply();
