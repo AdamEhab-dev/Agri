@@ -56,7 +56,7 @@ a { color: inherit; }
   background: radial-gradient(ellipse calc(var(--rx) * .8) calc(var(--ry) * .8) at var(--lx) var(--ly), color-mix(in srgb, var(--fc) 18%, transparent), transparent 72%),
     var(--tg),
     radial-gradient(ellipse var(--rx) var(--ry) at var(--lx) var(--ly), rgba(0,0,0,0) 0%, rgba(0,0,0,0) 58%, rgba(0,0,0,.5) 80%, rgba(0,0,0,.84) 100%); }
-.can { position: absolute; left: 50%; top: 50%; font-size: var(--w, 112px); will-change: transform, opacity, filter; cursor: pointer; }
+.can { position: absolute; left: 50%; top: 50%; font-size: var(--w, 112px); cursor: pointer; } /* no will-change: it locks the raster scale at the small size and blurs the pack when zoomed */
 .can img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; display: block; user-select: none; -webkit-user-drag: none; pointer-events: none; }
 .gs { position: absolute; left: 6%; right: 6%; bottom: -.05em; height: .14em; border-radius: 50%; background: radial-gradient(ellipse, rgba(0,0,0,.7), transparent 70%); pointer-events: none; }
 
@@ -510,6 +510,7 @@ a { color: inherit; }
     cansEl.appendChild(el);
     return el;
   });
+
 
   function fillFacts(f, idx) {
     var rows = function (a) { return '<dl class="specs">' + a.map(function (r) { return '<div><dt>' + r[0] + '</dt><dd>' + r[1] + '</dd></div>'; }).join('') + '</dl>'; };
