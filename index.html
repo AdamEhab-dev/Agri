@@ -288,11 +288,11 @@ a { color: inherit; }
 <i class="corner a"></i><i class="corner b"></i><i class="corner c"></i><i class="corner d"></i>
 
 <header class="hdr">
-  <div class="demo">نسخة مبدئية للعرض</div>
+  
   <a class="mark" href="#top" aria-label="مصر الدولية، الصفحة الرئيسية"><img src="img/logo.png" alt="مصر الدولية A3" width="211" height="173"></a>
   <div class="right">
     <button class="menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="menu"><svg viewBox="0 0 9 9" aria-hidden="true"><rect width="3" height="3"/><rect x="6" width="3" height="3"/><rect y="6" width="3" height="3"/><rect x="6" y="6" width="3" height="3"/></svg><span>القائمة</span></button>
-    <a class="cta" href="#join">تواصل معنا</a>
+    <a class="cta" href="https://wa.me/201229022333" target="_blank" rel="noopener noreferrer">تواصل معنا</a>
   </div>
 </header>
 <nav class="menu" id="menu" aria-label="القائمة الرئيسية">
@@ -341,8 +341,8 @@ a { color: inherit; }
 
 <section class="where" id="where">
   <h3 class="disp">أماكن التوزيع</h3>
-  <p>نوزّع على مزارع وجمعيات ومحلات مستلزمات زراعية في عدة محافظات. القائمة التالية للتوضيح فقط.</p>
-  <div class="chips" id="govChips"><button type="button" data-g="cairo">القاهرة</button><button type="button" data-g="giza">الجيزة</button><button type="button" data-g="alex">الإسكندرية</button><button type="button" data-g="beheira">البحيرة</button><button type="button" data-g="sharqia">الشرقية</button><button type="button" data-g="minya">المنيا</button><button type="button" data-g="fayoum">الفيوم</button><button type="button" data-g="asyut">أسيوط</button></div>
+  <p>نغطي محافظات مصر من الشمال إلى الجنوب. اضغط على اسم المحافظة أو الدبوس الأحمر لعرض بيانات المندوب.</p>
+  <div class="chips" id="govChips"><button type="button" data-g="alex">الإسكندرية</button><button type="button" data-g="kafr_sheikh">كفر الشيخ</button><button type="button" data-g="dakahlia">الدقهلية</button><button type="button" data-g="gharbia">الغربية</button><button type="button" data-g="sharqia">الشرقية</button><button type="button" data-g="monufia">المنوفية</button><button type="button" data-g="qalyubia">القليوبية</button><button type="button" data-g="ismailia">الإسماعيلية</button><button type="button" data-g="giza">الجيزة</button><button type="button" data-g="fayoum">الفيوم</button><button type="button" data-g="beni_suef">بني سويف</button><button type="button" data-g="minya">المنيا</button><button type="button" data-g="asyut">أسيوط</button><button type="button" data-g="sohag">سوهاج</button><button type="button" data-g="qena">قنا</button></div>
   <div class="mapwrap">
     <div class="map" id="map">
       <svg id="egy" viewBox="0 0 1100 1000" preserveAspectRatio="xMidYMid meet" role="img" aria-label="خريطة مصر ومناديب مصر الدولية">
@@ -375,15 +375,18 @@ a { color: inherit; }
   <h3 class="disp">اطلب عرض سعر</h3>
   <p>اترك رقمك وسيتواصل معك فريق المبيعات بالأسعار والكميات المتاحة وطرق التوصيل.</p>
   <form id="joinForm" novalidate>
+    <label for="uname" style="position:absolute;left:-9999px">الاسم</label>
+    <input id="uname" type="text" inputmode="text" placeholder="اسمك" autocomplete="name">
     <label for="phone" style="position:absolute;left:-9999px">رقم الهاتف</label>
     <input id="phone" type="tel" inputmode="tel" placeholder="رقم الهاتف أو واتساب" autocomplete="tel" required>
-    <button class="go" type="submit">أرسل طلبي</button>
+    <label for="msg" style="position:absolute;left:-9999px">الرسالة</label>
+    <textarea id="msg" placeholder="رسالتك أو استفسارك" rows="3" style="width:100%;padding:14px 16px;border-radius:6px;border:1px solid var(--line);background:rgba(255,255,255,.05);color:#fff;font:inherit;font-size:16px;text-align:right;resize:vertical;"></textarea>
+    <button class="go" type="submit">أرسل طلبي عبر واتساب</button>
     <div class="ok" id="ok" role="status"></div>
-    <small>هذه نسخة مبدئية للعرض، ولا يُرسل الطلب إلى أي جهة.</small>
   </form>
 </section>
 </main>
-<footer class="foot"><a href="#top">واتساب</a><a href="#top">فيسبوك</a><a href="#top">سياسة الخصوصية</a><a href="#top">الشروط والأحكام</a><span>&copy; 2026 مصر الدولية</span>
+<footer class="foot"><a href="https://wa.me/201229022333" target="_blank" rel="noopener noreferrer">واتساب</a><a href="#top">فيسبوك</a><a href="#top">سياسة الخصوصية</a><a href="#top">الشروط والأحكام</a><span>&copy; 2026 مصر الدولية</span>
   <div class="loopcue" id="loopcue" aria-hidden="true"><span><i class="ar">&#8595;</i> مرّر للأسفل مرة أخرى للعودة إلى البداية</span><div class="bar"><i></i></div></div>
 </footer>
 <div class="curtain" id="curtain" aria-hidden="true"><div class="cm"><img src="img/logo.png" alt="" width="211" height="173"></div></div>
@@ -784,7 +787,7 @@ a { color: inherit; }
     ['ما معنى فترة ما قبل الحصاد (PHI)؟', 'هي عدد الأيام بين آخر رشة وجمع المحصول. تهم مزارعي التصدير بشكل خاص، ويحددها المهندس الزراعي حسب المحصول.'],
     ['كيف أخزن الأسمدة بشكل صحيح؟', 'في مكان جاف جيد التهوية بعيداً عن الشمس المباشرة، مع إحكام الغلق بعد كل استخدام.'],
     ['ما معنى النحاس المخلبي؟', 'المخلّب مادة تحيط بعنصر النحاس وتبقيه ذائباً ومتاحاً للنبات. وهذا ما يصفه كبرون على عبوته: عالي الذوبان وسهل الإتاحة.'],
-    ['هل المنتجات مسجلة بوزارة الزراعة؟', 'بيانات التسجيل وتاريخ الإنتاج ومدة الصلاحية تطبع على العبوة. في هذه النسخة المبدئية هي نصوص توضيحية فقط.'],
+    ['هل المنتجات مسجلة بوزارة الزراعة؟', 'بيانات التسجيل وتاريخ الإنتاج ومدة الصلاحية مطبوعة على العبوة.'],
     ['كيف أطلب كميات لمشروع أو جمعية؟', 'اترك رقمك في قسم طلب عرض السعر، وسيتواصل معك فريق المبيعات بالأسعار والكميات المتاحة وطرق التوصيل.']
   ];
   var list = $('faqList');
@@ -814,8 +817,17 @@ a { color: inherit; }
   }
   $('joinForm').addEventListener('submit', function (e) {
     e.preventDefault();
-    var v = $('phone').value.replace(/[^\d]/g, '');
-    $('ok').textContent = v.length >= 8 ? 'وصلنا رقمك في هذه النسخة التجريبية، ولم يُرسل لأي جهة.' : 'اكتب رقم هاتف صحيح.';
+    var phone = $('phone').value.replace(/[^\d]/g, '');
+    var name = $('uname') ? $('uname').value.trim() : '';
+    var msg = $('msg') ? $('msg').value.trim() : '';
+    if (phone.length < 8) { $('ok').textContent = 'اكتب رقم هاتف صحيح.'; return; }
+    var text = 'مرحباً، أود الاستفسار عن منتجاتكم.';
+    if (name) text += '\nالاسم: ' + name;
+    text += '\nرقم التواصل: ' + phone;
+    if (msg) text += '\n' + msg;
+    var url = 'https://wa.me/201229022333?text=' + encodeURIComponent(text);
+    window.open(url, '_blank', 'noopener,noreferrer');
+    $('ok').textContent = 'جاري فتح واتساب...';
   });
 
   // fit the first FAQ line to half the viewport width
@@ -862,14 +874,28 @@ a { color: inherit; }
 
   // Governorates. A governorate with `rep` gets a red pin; the other fields stay empty until the client sends the data.
   var GOV = {
-    cairo:   { n: 'القاهرة',    ll: [31.24, 30.05], rep: { name: 'محمد أحمد محمد', phone: '01900000000' } },
-    giza:    { n: 'الجيزة',     ll: [30.9, 29.7] },
-    alex:    { n: 'الإسكندرية', ll: [29.95, 31.2],  rep: { name: 'حسن حسن حسن', phone: '01900000000' } },
-    beheira: { n: 'البحيرة',    ll: [30.3, 30.75] },
-    sharqia: { n: 'الشرقية',    ll: [31.55, 30.6] },
-    minya:   { n: 'المنيا',     ll: [30.75, 28.1] },
-    fayoum:  { n: 'الفيوم',     ll: [30.84, 29.3] },
-    asyut:   { n: 'أسيوط',      ll: [31.18, 27.18] }
+    alex:      { n: 'الإسكندرية', ll: [29.95, 31.2],  rep: { name: 'م/ محمد مجدي سعيد',    phone: '01055282230' } },
+    beheira:   { n: 'البحيرة',    ll: [30.3, 30.75],   rep: { name: 'م/ سلام حماد',          phone: '01267898987' } },
+    bustan:    { n: 'البستان',    ll: [30.4, 30.4],    rep: { name: 'م/ أحمد عبد السلام / م/ عمرو صاب', phone: '01030747057' } },
+    kafr_sheikh: { n: 'كفر الشيخ', ll: [30.94, 31.11], rep: { name: 'م/ أحمد البابلي',      phone: '01238868619' } },
+    gharbia:   { n: 'الغربية',    ll: [30.85, 30.88],  rep: { name: 'م/ أحمد أبو سالم / م/ محمد عمرو زيد', phone: '01136057164' } },
+    dakahlia:  { n: 'الدقهلية',   ll: [31.38, 31.0],   rep: { name: 'م/ محمود عبد اللطيف / م/ عبد الرحمن الدكاتي', phone: '01234750302' } },
+    sharqia:   { n: 'الشرقية',    ll: [31.55, 30.6],   rep: { name: 'م/ مصطفى عبد الرحمن',  phone: '01128985654' } },
+    qalyubia:  { n: 'القليوبية',  ll: [31.2, 30.33],   rep: { name: 'م/ أحمد محمد رضا',      phone: '01285062234' } },
+    ismailia:  { n: 'الإسماعيلية', ll: [32.27, 30.6],  rep: { name: 'م/ مصطفى الشهامي',     phone: '01332509737' } },
+    cairo:     { n: 'القاهرة',    ll: [31.24, 30.05],  rep: { name: 'م/ مصطفى تدير',        phone: '01056617225' } },
+    shibin:    { n: 'شبراخيت - أبو حمص', ll: [30.55, 30.72], rep: { name: 'م/ مصطفى تدير / م/ الدلتاج / م/ حوش عيسى', phone: '01056617225' } },
+    markaz_zifta: { n: 'مركز زفر', ll: [31.0, 30.72],  rep: { name: 'م/ أحمد عبد السلام',   phone: '01030585095' } },
+    khattatba: { n: 'الخطاطبة - كفر داود', ll: [30.65, 30.3], rep: { name: 'م/ محمد جودة', phone: '01076918431' } },
+    wadi_natrun: { n: 'وادي النطرون', ll: [30.35, 30.4], rep: { name: 'م/ عمرو صابر',       phone: '01035377157' } },
+    monufia:   { n: 'المنوفية',   ll: [30.99, 30.6],   rep: { name: 'م/ مصطفى صلاح / م/ محمد سيد أحمد', phone: '01095241501' } },
+    giza:      { n: 'الجيزة',     ll: [30.9, 29.7],    rep: { name: 'م/ محمد جمال',          phone: '01228181577' } },
+    fayoum:    { n: 'الفيوم',     ll: [30.84, 29.3],   rep: { name: 'م/ أحمد عماد النمس',   phone: '01067423204' } },
+    beni_suef: { n: 'بني سويف',   ll: [31.1, 29.07],   rep: { name: 'م/ عبدالله هندى',      phone: '01443170400' } },
+    minya:     { n: 'المنيا',     ll: [30.75, 28.1],   rep: { name: 'م/ أحمد المعزري',      phone: '01003489200' } },
+    asyut:     { n: 'أسيوط',      ll: [31.18, 27.18],  rep: { name: 'م/ محمود السكري',      phone: '01099267610' } },
+    sohag:     { n: 'سوهاج',      ll: [31.7, 26.56],   rep: { name: 'م/ محمود السكري',      phone: '01099267610' } },
+    qena:      { n: 'قنا',        ll: [32.72, 26.16],  rep: { name: 'م/ محمود السكري',      phone: '01099267610' } }
   };
   var keys = Object.keys(GOV), repKeys = keys.filter(function (k) { return GOV[k].rep; });
   var svg = $('egy'), mapEl = $('map'), pinsG = $('pins'), fm = $('fm'), panel = $('rep');
