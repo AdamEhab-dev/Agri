@@ -214,10 +214,13 @@ a { color: inherit; }
 .rep dd a { color: #fff; text-decoration: none; direction: ltr; unicode-bidi: plaintext; }
 .rep .call { display: block; margin-top: 12px; padding: 10px; text-align: center; font-weight: 700; font-size: 15px; text-decoration: none; color: #04120a; background: #3dff7a; border-radius: 8px; box-shadow: 0 0 18px rgba(61,255,122,.4); transition: transform .15s; }
 .rep .call:hover { transform: scale(1.02); }
+.rep { max-height: calc(100% - 28px); overflow-y: auto; overscroll-behavior: contain; }
+.rep .rp + .rp { margin-top: 16px; }
+.rep .who { display: block; margin: 0 0 6px; font-size: 12px; font-weight: 700; color: #3dff7a; }
 .map-hint { margin: 14px auto 0; max-width: 62ch; font-size: 13px; color: var(--muted); }
 @media (max-width: 720px) {
   .map { aspect-ratio: 1 / 1.08; max-height: none; border-radius: 14px; }
-  .rep { top: auto; right: 10px; left: 10px; bottom: 10px; width: auto; padding: 14px 14px 12px; }
+  .rep { top: auto; right: 10px; left: 10px; bottom: 10px; width: auto; padding: 14px 14px 12px; max-height: calc(100% - 20px); }
   .rep h4 { font-size: 26px; margin-bottom: 6px; }
   .rep dl div { padding: 6px 0; }
   .rep dd { font-size: 14px; }
@@ -342,7 +345,7 @@ a { color: inherit; }
 <section class="where" id="where">
   <h3 class="disp">أماكن التوزيع</h3>
   <p>نغطي محافظات مصر من الشمال إلى الجنوب. اضغط على اسم المحافظة أو الدبوس الأحمر لعرض بيانات المندوب.</p>
-  <div class="chips" id="govChips"><button type="button" data-g="alex">الإسكندرية</button><button type="button" data-g="kafr_sheikh">كفر الشيخ</button><button type="button" data-g="dakahlia">الدقهلية</button><button type="button" data-g="gharbia">الغربية</button><button type="button" data-g="sharqia">الشرقية</button><button type="button" data-g="monufia">المنوفية</button><button type="button" data-g="qalyubia">القليوبية</button><button type="button" data-g="ismailia">الإسماعيلية</button><button type="button" data-g="giza">الجيزة</button><button type="button" data-g="fayoum">الفيوم</button><button type="button" data-g="beni_suef">بني سويف</button><button type="button" data-g="minya">المنيا</button><button type="button" data-g="asyut">أسيوط</button><button type="button" data-g="sohag">سوهاج</button><button type="button" data-g="qena">قنا</button></div>
+  <div class="chips" id="govChips"><button type="button" data-g="alex">الإسكندرية</button><button type="button" data-g="kafr_sheikh">كفر الشيخ</button><button type="button" data-g="dakahlia">الدقهلية</button><button type="button" data-g="gharbia">الغربية</button><button type="button" data-g="sharqia">الشرقية</button><button type="button" data-g="monufia">المنوفية</button><button type="button" data-g="qalyubia">القليوبية</button><button type="button" data-g="ismailia">الإسماعيلية</button><button type="button" data-g="giza">الجيزة والعياط</button><button type="button" data-g="fayoum">الفيوم</button><button type="button" data-g="beni_suef">بني سويف</button><button type="button" data-g="minya">المنيا</button><button type="button" data-g="asyut">أسيوط</button><button type="button" data-g="sohag">سوهاج</button><button type="button" data-g="qena">قنا</button></div>
   <div class="mapwrap">
     <div class="map" id="map">
       <svg id="egy" viewBox="0 0 1100 1000" preserveAspectRatio="xMidYMid meet" role="img" aria-label="خريطة مصر ومناديب مصر الدولية">
@@ -872,30 +875,31 @@ a { color: inherit; }
   $('seaMed').setAttribute('x', q1[0]); $('seaMed').setAttribute('y', q1[1] - 14);
   $('seaRed').setAttribute('x', q2[0] + 35); $('seaRed').setAttribute('y', q2[1]);
 
-  // Governorates. A governorate with `rep` gets a red pin; the other fields stay empty until the client sends the data.
+  // Governorates. A governorate with `rep` gets a red pin. `rep` is one rep {name, phone} or a list of reps [{name, phone}, ...] (each rep gets its own block + call button in the card).
+  // Data matches the "خريطة توزيع مهندسين المبيعات" sheet (+ the Sharqia update from the client's message).
   var GOV = {
-    alex:      { n: 'الإسكندرية', ll: [29.95, 31.2],  rep: { name: 'م/ محمد مجدي سعيد',    phone: '01055282230' } },
-    beheira:   { n: 'البحيرة',    ll: [30.3, 30.75],   rep: { name: 'م/ سلام حماد',          phone: '01267898987' } },
-    bustan:    { n: 'البستان',    ll: [30.4, 30.4],    rep: { name: 'م/ أحمد عبد السلام / م/ عمرو صاب', phone: '01030747057' } },
-    kafr_sheikh: { n: 'كفر الشيخ', ll: [30.94, 31.11], rep: { name: 'م/ أحمد البابلي',      phone: '01238868619' } },
-    gharbia:   { n: 'الغربية',    ll: [30.85, 30.88],  rep: { name: 'م/ أحمد أبو سالم / م/ محمد عمرو زيد', phone: '01136057164' } },
-    dakahlia:  { n: 'الدقهلية',   ll: [31.38, 31.0],   rep: { name: 'م/ محمود عبد اللطيف / م/ عبد الرحمن الدكاتي', phone: '01234750302' } },
-    sharqia:   { n: 'الشرقية',    ll: [31.55, 30.6],   rep: { name: 'م/ مصطفى عبد الرحمن',  phone: '01128985654' } },
-    qalyubia:  { n: 'القليوبية',  ll: [31.2, 30.33],   rep: { name: 'م/ أحمد محمد رضا',      phone: '01285062234' } },
-    ismailia:  { n: 'الإسماعيلية', ll: [32.27, 30.6],  rep: { name: 'م/ مصطفى الشهامي',     phone: '01332509737' } },
-    cairo:     { n: 'القاهرة',    ll: [31.24, 30.05],  rep: { name: 'م/ مصطفى تدير',        phone: '01056617225' } },
-    shibin:    { n: 'شبراخيت - أبو حمص', ll: [30.55, 30.72], rep: { name: 'م/ مصطفى تدير / م/ الدلتاج / م/ حوش عيسى', phone: '01056617225' } },
-    markaz_zifta: { n: 'مركز زفر', ll: [31.0, 30.72],  rep: { name: 'م/ أحمد عبد السلام',   phone: '01030585095' } },
-    khattatba: { n: 'الخطاطبة - كفر داود', ll: [30.65, 30.3], rep: { name: 'م/ محمد جودة', phone: '01076918431' } },
-    wadi_natrun: { n: 'وادي النطرون', ll: [30.35, 30.4], rep: { name: 'م/ عمرو صابر',       phone: '01035377157' } },
-    monufia:   { n: 'المنوفية',   ll: [30.99, 30.6],   rep: { name: 'م/ مصطفى صلاح / م/ محمد سيد أحمد', phone: '01095241501' } },
-    giza:      { n: 'الجيزة',     ll: [30.9, 29.7],    rep: { name: 'م/ محمد جمال',          phone: '01228181577' } },
-    fayoum:    { n: 'الفيوم',     ll: [30.84, 29.3],   rep: { name: 'م/ أحمد عماد النمس',   phone: '01067423204' } },
-    beni_suef: { n: 'بني سويف',   ll: [31.1, 29.07],   rep: { name: 'م/ عبدالله هندى',      phone: '01443170400' } },
-    minya:     { n: 'المنيا',     ll: [30.75, 28.1],   rep: { name: 'م/ أحمد المعزري',      phone: '01003489200' } },
-    asyut:     { n: 'أسيوط',      ll: [31.18, 27.18],  rep: { name: 'م/ محمود السكري',      phone: '01099267610' } },
-    sohag:     { n: 'سوهاج',      ll: [31.7, 26.56],   rep: { name: 'م/ محمود السكري',      phone: '01099267610' } },
-    qena:      { n: 'قنا',        ll: [32.72, 26.16],  rep: { name: 'م/ محمود السكري',      phone: '01099267610' } }
+    alex:      { n: 'الإسكندرية', ll: [29.95, 31.2],  rep: { name: 'م/ صلاح فليله', phone: '01080146687' } },
+    nubaria:   { n: 'النوبارية',  ll: [29.99, 30.91], rep: { name: 'م/ اسلام حماد', phone: '01066798986' } },
+    bustan:    { n: 'البستان',    ll: [30.24, 30.87], rep: { name: 'م/ عمرو صابر', phone: '01003537657' } },
+    kafr_sheikh: { n: 'كفر الشيخ', ll: [30.94, 31.11], rep: { name: 'م/ أحمد البابلي', phone: '01016338869' } },
+    shibin:    { n: 'شبراخيت - أبو حمص', ll: [30.72, 31.06], rep: { name: 'م/ مصطفى بدير', phone: '01556416625' } },
+    hosh_issa: { n: 'حوش عيسى - الدلنجات', ll: [30.5, 30.96], rep: { name: 'م/ أحمد عبد السلام', phone: '01003585495' } },
+    markaz_badr: { n: 'مركز بدر', ll: [30.52, 30.61], rep: { name: 'م/ أحمد عبد السلام', phone: '01003585495' } },
+    gharbia:   { n: 'الغربية',    ll: [30.85, 30.88], rep: [ { name: 'م/ أحمد أبو سالم', phone: '01030125511' }, { name: 'م/ محمد إبراهيم زايد', phone: '01158147164' } ] },
+    dakahlia:  { n: 'الدقهلية',   ll: [31.38, 31.0],  rep: [ { name: 'م/ محمود عبد الله', phone: '01033791526' }, { name: 'م/ عبد الرحمن الدكانى', phone: '01044241348' } ] },
+    sharqia:   { n: 'الشرقية',    ll: [31.55, 30.6],  rep: [ { name: 'م/ محمد صلاح', phone: '01092239742' }, { name: 'م/ محمد عصمت', phone: '01143039602' } ] },
+    qalyubia:  { n: 'القليوبية',  ll: [31.2, 30.33],  rep: { name: 'م/ أحمد محمد ندا', phone: '01285026224' } },
+    ismailia:  { n: 'الإسماعيلية', ll: [32.27, 30.6], rep: { name: 'م/ محمد ممدوح التهامى', phone: '01033459737' } },
+    khattaba:  { n: 'الخطاطبة - كفر داوود', ll: [30.65, 30.3], rep: { name: 'م/ محمد جودة', phone: '01006716831' } },
+    wadi_natrun: { n: 'وادي النطرون', ll: [30.35, 30.4], rep: { name: 'م/ عمرو صابر', phone: '01003537657' } },
+    monufia:   { n: 'المنوفية',   ll: [30.99, 30.6],  rep: [ { name: 'م/ مصطفى صلاح', phone: '01010772580' }, { name: 'م/ محمد سيد أحمد', phone: '01019524351' } ] },
+    giza:      { n: 'الجيزة والعياط', ll: [30.9, 29.7], rep: { name: 'م/ محمد جمال', phone: '01022741427' } },
+    fayoum:    { n: 'الفيوم',     ll: [30.84, 29.3],  rep: { name: 'م/ محمد سراج الدين', phone: '01500111605' } },
+    beni_suef: { n: 'بني سويف',   ll: [31.1, 29.07],  rep: { name: 'م/ عبدالله هندى', phone: '01014431704' } },
+    minya:     { n: 'المنيا',     ll: [30.75, 28.1],  rep: { name: 'م/ أحمد المغربى', phone: '01010348902' } },
+    asyut:     { n: 'أسيوط',      ll: [31.18, 27.18], rep: { name: 'م/ محمود السكرى', phone: '01099627641' } },
+    sohag:     { n: 'سوهاج',      ll: [31.7, 26.56],  rep: { name: 'م/ محمود السكرى', phone: '01099627641' } },
+    qena:      { n: 'قنا',        ll: [32.72, 26.16], rep: { name: 'م/ محمود السكرى', phone: '01099627641' } }
   };
   var keys = Object.keys(GOV), repKeys = keys.filter(function (k) { return GOV[k].rep; });
   var svg = $('egy'), mapEl = $('map'), pinsG = $('pins'), fm = $('fm'), panel = $('rep');
@@ -954,13 +958,26 @@ a { color: inherit; }
 
   // rep panel
   var row = function (l, v) { return '<div><dt>' + l + '</dt><dd' + (v ? '>' + v : ' class="empty">&mdash;') + '</dd></div>'; };
+  var NUMS = ['الأول', 'الثاني', 'الثالث', 'الرابع'];
   function showPanel(k, auto) {
     var g = GOV[k], r = g.rep; panelAuto = !!auto;
-    var pretty = r && r.phone ? r.phone.replace(/^(\d{3})(\d{4})(\d{4})$/, '$1 $2 $3') : '';
+    var list = r ? [].concat(r) : [];
+    var pretty = function (p) { return p ? p.replace(/^(\d{3})(\d{4})(\d{4})$/, '$1 $2 $3') : ''; };
     panel.className = 'rep open' + (r ? '' : ' none');
-    panel.innerHTML = '<button type="button" class="x" aria-label="إغلاق">&times;</button><span class="tag">' + (r ? 'مندوب المبيعات' : 'لا يوجد مندوب حاليًا') + '</span><h4 class="disp">' + g.n + '</h4><dl>'
-      + row('الاسم', r && r.name) + row('الهاتف', r && r.phone ? '<a href="tel:' + r.phone + '">' + pretty + '</a>' : '') + row('واتساب', r && r.whatsapp) + row('المنطقة', r && r.area) + row('البريد', r && r.email) + '</dl>'
-      + (r && r.phone ? '<a class="call" href="tel:' + r.phone + '">اتصل بالمندوب</a>' : '');
+    var body;
+    if (list.length > 1) {
+      // several reps in one governorate: one block per rep (name + phone) and its own call button
+      body = list.map(function (x, i) {
+        return '<div class="rp"><span class="who">المندوب ' + (NUMS[i] || (i + 1)) + '</span><dl>' + row('الاسم', x.name) + row('الهاتف', x.phone ? '<a href="tel:' + x.phone + '">' + pretty(x.phone) + '</a>' : '') + '</dl>'
+          + (x.phone ? '<a class="call" href="tel:' + x.phone + '">اتصل بـ ' + x.name + '</a>' : '') + '</div>';
+      }).join('');
+    } else {
+      r = list[0];
+      body = '<dl>' + row('الاسم', r && r.name) + row('الهاتف', r && r.phone ? '<a href="tel:' + r.phone + '">' + pretty(r.phone) + '</a>' : '') + row('واتساب', r && r.whatsapp) + row('المنطقة', r && r.area) + row('البريد', r && r.email) + '</dl>'
+        + (r && r.phone ? '<a class="call" href="tel:' + r.phone + '">اتصل بالمندوب</a>' : '');
+    }
+    panel.innerHTML = '<button type="button" class="x" aria-label="إغلاق">&times;</button><span class="tag">' + (list.length > 1 ? 'مناديب المبيعات' : r ? 'مندوب المبيعات' : 'لا يوجد مندوب حاليًا') + '</span><h4 class="disp">' + g.n + '</h4>' + body;
+    panel.scrollTop = 0;
     panel.querySelector('.x').addEventListener('click', function () { hidePanel(true); });
   }
   function hidePanel(clear) {
