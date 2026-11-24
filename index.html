@@ -1,4 +1,4 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="icon" type="image/png" href="img-front/logo.png"><link rel="apple-touch-icon" href="img-front/logo.png"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <title>مصر الدولية للأسمدة</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -8455,7 +8455,7 @@ a { color: inherit; }
   var smooth = function (a, b, x) { x = Math.min(1, Math.max(0, (x - a) / (b - a))); return x * x * (3 - 2 * x); };
   var wrapD = function (x) { return ((((x + n / 2) % n) + n) % n) - n / 2; };
   // infinite carousel: always take the shortest way round the ring
-  function heroOn() { return p < 0.08 || p > 0.93; }
+  function heroOn() { return p < 0.12 || p > 0.82; }
   function go(i) { var cur = Math.round(target); target = cur + wrapD(i - cur); lastInt = performance.now(); }
   function step(dir) { target = Math.round(target) + dir; lastInt = performance.now(); }
 
@@ -8499,7 +8499,7 @@ a { color: inherit; }
       drift = cyc < 0.86 ? 0.32 * (cyc / 0.86) : 0.32 * Math.pow(1 - (cyc - 0.86) / 0.14, 2);
     }
 
-    var s1 = smooth(0.07, 0.15, p), s2 = smooth(0.64, 0.72, p), s4 = smooth(0.85, 0.95, p);
+    var s1 = smooth(0.07, 0.15, p), s2 = smooth(0.64, 0.72, p), s4 = smooth(0.80, 0.90, p);
     var wH = 1 - s1 + s4, wSp = s1 - s2, wSl = s2 - s4, wSt = 0; // hero layout returns at the end of the journey
     var idx = ((Math.round(pos) % n) + n) % n;
     setActive(idx);
@@ -8538,7 +8538,8 @@ a { color: inherit; }
       var a = Math.max(0, 1 - ad);
       var isA = i === idx ? 1 : 0;
       var bob = reduce ? 0 : Math.sin(t * 1.15 + i * 1.4) * 5;
-      var it = reduce ? 1 : Math.min(1, Math.max(0, (t - 0.1 - i * 0.12) / 1.0));
+      var dist0 = Math.abs(wrapD(i));
+      var it = reduce ? 1 : Math.min(1, Math.max(0, (t - 0.08 - Math.min(dist0, 6) * 0.10) / 0.85));
       var introY = -(1 - (1 - Math.pow(1 - it, 3))) * vh * 0.9;
       var base = f.H * W;
 
@@ -8660,6 +8661,22 @@ a { color: inherit; }
     })(st);
   }
   ['wheel', 'touchstart'].forEach(function (ev) { addEventListener(ev, function () { autoScroll = false; openingProduct = false; }, { passive: true }); });
+  var snapTimer = null;
+  addEventListener('scroll', function () {
+    if (autoScroll || looping || dragging || openingProduct) return;
+    clearTimeout(snapTimer);
+    snapTimer = setTimeout(function () {
+      if (autoScroll || looping || dragging || openingProduct) return;
+      var r = journey.getBoundingClientRect();
+      var span = Math.max(1, r.height - vh);
+      var curP = Math.min(1, Math.max(0, -r.top / span));
+      if (curP > 0.76 && curP < 0.93) {
+        animateScrollTo(Math.round(scrollY + r.top + 0.95 * span), 320);
+      } else if (curP > 0.015 && curP < 0.105) {
+        animateScrollTo(Math.max(0, Math.round(scrollY + r.top)), 300);
+      }
+    }, 140);
+  }, { passive: true });
   function openProduct(i) {
     var cur = Math.round(target); go(i);
     openingProduct = true;
