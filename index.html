@@ -58,6 +58,7 @@ a { color: inherit; }
     radial-gradient(ellipse var(--rx) var(--ry) at var(--lx) var(--ly), rgba(0,0,0,0) 0%, rgba(0,0,0,0) 58%, rgba(0,0,0,.5) 80%, rgba(0,0,0,.84) 100%); }
 .can { position: absolute; left: 50%; top: 50%; font-size: var(--w, 112px); cursor: pointer; } /* no will-change: it locks the raster scale at the small size and blurs the pack when zoomed */
 .can img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; display: block; user-select: none; -webkit-user-drag: none; pointer-events: none; }
+.can img:not([src]) { opacity: 0; }
 .can .c-front {
   transition: opacity 0.45s cubic-bezier(0.4, 0, 0.2, 1), transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
   opacity: 1;
@@ -157,7 +158,7 @@ a { color: inherit; }
 .corner.d { right: clamp(14px, 3.5vw, 48px); bottom: 26px; border-right-width: 1px; border-bottom-width: 1px; }
 
 /* ---------- FAQ ---------- */
-.faq { position: relative; padding: 18vh max(16px, env(safe-area-inset-left, 0px)) 14vh; background: linear-gradient(180deg, #000, #0a0c09 30%, #181b16 100%); overflow: hidden; }
+.faq { position: relative; padding: 18vh max(16px, env(safe-area-inset-left, 0px)) 14vh; background: linear-gradient(180deg, #000, #0a0c09 30%, #181b16 100%); overflow: hidden; content-visibility: auto; contain-intrinsic-size: auto 900px; }
 .faq::before { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(255,255,255,.1), transparent 70%); pointer-events: none; }
 .faq-head { position: relative; margin: 0 auto 9vh; max-width: 1300px; padding: 0 clamp(0px, 3vw, 40px); }
 .faq-head h2 { margin: 0; width: max-content; margin-inline-start: 0; font-size: 12vw; line-height: .78; color: #fff;
@@ -178,7 +179,7 @@ a { color: inherit; }
 .open .ans p { transform: none; opacity: 1; }
 
 /* distribution + quote + footer */
-.where { padding: 12vh max(16px, env(safe-area-inset-left, 0px)) 4vh; background: #181b16; text-align: center; }
+.where { padding: 12vh max(16px, env(safe-area-inset-left, 0px)) 4vh; background: #181b16; text-align: center; content-visibility: auto; contain-intrinsic-size: auto 1000px; }
 .where h3 { margin: 0 0 12px; font-size: clamp(34px, 4.4vw, 60px); }
 .where p { margin: 0 auto 26px; max-width: 46ch; color: var(--muted); }
 .chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; max-width: 760px; margin: 0 auto; }
@@ -247,7 +248,7 @@ a { color: inherit; }
   .rep dd { font-size: 14px; }
   .mctl button { width: 38px; height: 38px; }
 }
-.join { padding: 12vh max(16px, env(safe-area-inset-left, 0px)) 10vh; background: linear-gradient(180deg, #181b16, #080a07); text-align: center; }
+.join { padding: 12vh max(16px, env(safe-area-inset-left, 0px)) 10vh; background: linear-gradient(180deg, #181b16, #080a07); text-align: center; content-visibility: auto; contain-intrinsic-size: auto 600px; }
 .join h3 { margin: 0 0 12px; font-size: clamp(40px, 5.6vw, 80px); }
 .join p { margin: 0 auto 28px; max-width: 42ch; color: var(--muted); }
 .join form { display: grid; gap: 12px; max-width: 420px; margin: 0 auto; }
@@ -306,6 +307,7 @@ a { color: inherit; }
   .faq-head p { position: static; text-align: right; margin-top: 16px; }
   .spectrum { width: 64vw; }
   .hint { display: none; }
+  .grain { display: none; }
 }
 @media (prefers-reduced-motion: reduce) { .flavname.snap span { animation: none; } .loopcue .ar { animation: none; } }
 </style>
@@ -8370,9 +8372,14 @@ a { color: inherit; }
   var cansEl = $('cans'), dot = $('dot'), flavWrap = $('flavname'), flavSpan = flavWrap.querySelector('span'), flavSub = flavWrap.querySelector('small');
   var tint = $('tint'), burst = $('burst'), glow = $('glow'), hud = $('hud'), facts = $('facts'), slogan = $('slogan');
   var shade = $('shade'), discTop = $('discTop'), journey = $('journey'), hintEl = document.querySelector('.hint');
+  var progressEl = $('progress'), sl1El = $('sl1'), sl2El = $('sl2'), stageEl = $('stage');
   var factEls = [].slice.call(document.querySelectorAll('.fact'));
   var railBtns = [].slice.call(document.querySelectorAll('#rail button'));
   var esc = function (s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;'); };
+
+  var canFrontImgs = new Array(n), canBackImgs = new Array(n);
+  var frontLoaded = new Array(n), backLoaded = new Array(n), canHidden = new Array(n);
+  var lastPreloadIdx = -1, initialLoaded = false;
 
   var cans = P.map(function (f, i) {
     var el = document.createElement('div');
@@ -8381,22 +8388,55 @@ a { color: inherit; }
     el.style.width = w + 'em'; el.style.height = f.H + 'em';
     el.style.margin = (-f.H / 2) + 'em 0 0 ' + (-w / 2) + 'em';
     el.style.setProperty('--c', f.c);
+    el.style.display = 'none';
+    canHidden[i] = true;
     var imgHtml = '';
     if (f.img) {
       if (f.imgBack) {
-        imgHtml = '<img class="c-front" src="' + f.img + '" alt="' + esc(f.l1 + ' ' + f.l2) + '" draggable="false" decoding="async">' +
-                  '<img class="c-back" src="' + f.imgBack + '" alt="' + esc(f.l1 + ' ' + f.l2 + ' ظهر') + '" draggable="false" decoding="async">';
+        imgHtml = '<img class="c-front" alt="' + esc(f.l1 + ' ' + f.l2) + '" draggable="false" decoding="async">' +
+                  '<img class="c-back" alt="' + esc(f.l1 + ' ' + f.l2 + ' ظهر') + '" draggable="false" decoding="async">';
       } else {
-        imgHtml = '<img class="c-front" src="' + f.img + '" alt="' + esc(f.l1 + ' ' + f.l2) + '" draggable="false" decoding="async">';
+        imgHtml = '<img class="c-front" alt="' + esc(f.l1 + ' ' + f.l2) + '" draggable="false" decoding="async">';
       }
     } else {
       imgHtml = '<div class="pouch" role="img" aria-label="' + esc(f.l1 + ' ' + f.l2) + '"><i></i><div class="plabel"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21V10"/><path d="M12 15c-4.500 0-6.500-2.500-6.500-6 4.500 0 6.500 2.500 6.500 6zM12 12c3.500 0 5.500-2 5.500-5.500-3.500 0-5.500 2-5.500 5.500z"/></svg><em>SEAWEED</em><b>طحالب بحرية</b><span>100% مستخلص</span></div></div>';
     }
     el.innerHTML = '<i class="gs"></i>' + imgHtml;
+    canFrontImgs[i] = el.querySelector('.c-front');
+    canBackImgs[i] = el.querySelector('.c-back');
     el.addEventListener('click', function () { if (heroOn() && !looping && performance.now() - clickBlock > 300) openProduct(i); });
     cansEl.appendChild(el);
     return el;
   });
+
+  function loadCanFront(i, highPriority) {
+    i = ((i % n) + n) % n;
+    if (frontLoaded[i] || !P[i].img) return;
+    frontLoaded[i] = true;
+    var img = canFrontImgs[i];
+    if (!img) return;
+    if (highPriority) img.setAttribute('fetchpriority', 'high');
+    img.src = P[i].img;
+  }
+  function loadCanBack(i) {
+    i = ((i % n) + n) % n;
+    if (backLoaded[i] || !P[i].imgBack) return;
+    backLoaded[i] = true;
+    var img = canBackImgs[i];
+    if (img) img.src = P[i].imgBack;
+  }
+  // Load active product + 3 neighbors on each side (7 images total), expanding seamlessly as user swipes
+  function preloadWindow(centerIdx) {
+    centerIdx = ((centerIdx % n) + n) % n;
+    if (centerIdx === lastPreloadIdx) return;
+    lastPreloadIdx = centerIdx;
+    loadCanFront(centerIdx, !initialLoaded);
+    initialLoaded = true;
+    for (var d = 1; d <= 3; d++) {
+      loadCanFront(centerIdx + d, false);
+      loadCanFront(centerIdx - d, false);
+    }
+  }
 
 
   function iconForPanel(title, j) {
@@ -8448,23 +8488,47 @@ a { color: inherit; }
   var lastInt = 0, active = -1, factIdx = -1, rotA = -6, tmx = 0, mx = 0, rf = 0;
   var p = 0, t0 = performance.now(), dragging = false, clickBlock = 0, looping = false, autoScroll = false, openingProduct = false;
 
+  var journeyTop = 0, journeyHeight = 1, docScrollMax = 1, shownBackIdx = -1;
+  function measureLayout() {
+    var r = journey.getBoundingClientRect();
+    journeyTop = r.top + scrollY;
+    journeyHeight = Math.max(1, r.height);
+    docScrollMax = Math.max(1, document.documentElement.scrollHeight - vh);
+  }
   function size() {
-    vw = innerWidth; vh = $('stage').clientHeight || innerHeight; // stage height is stable while the mobile URL bar shows/hides
+    vw = innerWidth; vh = stageEl.clientHeight || innerHeight; // stage height is stable while the mobile URL bar shows/hides
     var mobile = vw < 720;
     W = mobile ? Math.max(54, Math.min(vw * 0.27, vh * 0.13)) : Math.min(140, Math.max(66, vw * 0.083));
     S = vw * (mobile ? 0.44 : 0.19);
     root.style.setProperty('--w', W + 'px');
+    measureLayout();
   }
   var smooth = function (a, b, x) { x = Math.min(1, Math.max(0, (x - a) / (b - a))); return x * x * (3 - 2 * x); };
   var wrapD = function (x) { return ((((x + n / 2) % n) + n) % n) - n / 2; };
   // infinite carousel: always take the shortest way round the ring
   function heroOn() { return p < 0.12 || p > 0.82; }
-  function go(i) { var cur = Math.round(target); target = cur + wrapD(i - cur); lastInt = performance.now(); }
-  function step(dir) { target = Math.round(target) + dir; lastInt = performance.now(); }
+  function go(i) { var cur = Math.round(target); target = cur + wrapD(i - cur); lastInt = performance.now(); preloadWindow(Math.round(target)); }
+  function step(dir) { target = Math.round(target) + dir; lastInt = performance.now(); preloadWindow(Math.round(target)); }
+
+  // Back button support: keep a single history entry when viewing product details or lower sections
+  var inDetailsHistory = false, handlingPop = false;
+  function enterDetailsHistory(tag) {
+    if (handlingPop) return;
+    var hash = '#' + (tag || 'details');
+    try {
+      if (!inDetailsHistory) {
+        inDetailsHistory = true;
+        history.pushState({ view: 'details', tag: tag || '' }, '', hash);
+      } else if (location.hash !== hash) {
+        history.replaceState({ view: 'details', tag: tag || '' }, '', hash);
+      }
+    } catch (e) {}
+  }
 
   function setActive(a) {
     if (a === active) return;
     active = a;
+    preloadWindow(a);
     var f = P[a];
     root.style.setProperty('--fc', f.c); root.style.setProperty('--fd', f.d);
     flavSpan.innerHTML = f.l1 + '<br>' + f.l2;
@@ -8486,12 +8550,24 @@ a { color: inherit; }
   var heroTilt = function (i) { return -6 + Math.sin(i * 1.9) * 4; };
 
   function frame(now) {
-    var t = (now - t0) / 1000;
-    var r = journey.getBoundingClientRect();
-    var span = Math.max(1, r.height - vh);
-    p = Math.min(1, Math.max(0, -r.top / span));
-    $('progress').style.transform = 'scaleX(' + Math.min(1, scrollY / Math.max(1, document.documentElement.scrollHeight - vh)) + ')';
+    var sy = scrollY;
+    var span = Math.max(1, journeyHeight - vh);
+    p = Math.min(1, Math.max(0, (sy - journeyTop) / span));
+    progressEl.style.transform = 'scaleX(' + Math.min(1, sy / docScrollMax) + ')';
 
+    // Record history entry once if user scrolled down into product details or lower sections
+    if (p > 0.14 && !inDetailsHistory && !handlingPop && !looping && !autoScroll) {
+      enterDetailsHistory('product-' + P[active >= 0 ? active : 0].k);
+    }
+
+    // Pause heavy stage calculations when user has scrolled past the sticky stage (FAQ / Map / Footer)
+    if (sy >= journeyTop + journeyHeight) {
+      if (pull > 0 && now - pullT > 700) setPull(pull - 0.03);
+      requestAnimationFrame(frame);
+      return;
+    }
+
+    var t = (now - t0) / 1000;
     pos += (target - pos) * (dragging ? 0.38 : 0.11);
     if (p > 0.12 && p < 0.9) pos = target; // details phase: never show a half-way product
     mx += (tmx - mx) * 0.06;
@@ -8506,6 +8582,8 @@ a { color: inherit; }
     var wH = 1 - s1 + s4, wSp = s1 - s2, wSl = s2 - s4, wSt = 0; // hero layout returns at the end of the journey
     var idx = ((Math.round(pos) % n) + n) % n;
     setActive(idx);
+    // Lazy-load active product's back cover just before entering details panels
+    if (p > 0.08 && P[idx].imgBack) loadCanBack(idx);
 
     var fa = P[idx], numFacts = fa.reg.length, maxFact = numFacts - 1;
     var fi = openingProduct ? 0 : Math.min(maxFact, Math.max(0, Math.floor((p - 0.15) / 0.49 * numFacts)));
@@ -8534,12 +8612,31 @@ a { color: inherit; }
     var oC = off(cu, cv), oR = off(R[0], R[1]);
     var spX = Fx - oC[0] - vw / 2, spY = Fy - oC[1] - vh / 2 - cy;
     var Lx = Fx + oR[0] - oC[0], Ly = Fy + oR[1] - oC[1];
+    var ptrEvt = wH > 0.6 ? 'auto' : 'none';
     for (var i = 0; i < n; i++) {
-      var f = P[i], el = cans[i];
-      var dRaw = wrapD(i - pos), ad = Math.abs(dRaw);
-      var dH = wrapD(i - pos + drift);
-      var a = Math.max(0, 1 - ad);
       var isA = i === idx ? 1 : 0;
+      var dH = wrapD(i - pos + drift);
+      var absDH = Math.abs(dH);
+      // Visibility culling: skip off-screen cans completely so mobile only animates ~5-7 visible items
+      var isVis = isA || (wH > 0.001 && absDH < 2.5);
+      var el = cans[i];
+      if (!isVis) {
+        if (!canHidden[i]) {
+          el.style.display = 'none';
+          el.style.filter = '';
+          canHidden[i] = true;
+        }
+        continue;
+      }
+      if (canHidden[i]) {
+        el.style.display = '';
+        canHidden[i] = false;
+        if (!frontLoaded[i]) loadCanFront(i, false);
+      }
+
+      var f = P[i];
+      var dRaw = wrapD(i - pos), ad = Math.abs(dRaw);
+      var a = Math.max(0, 1 - ad);
       var bob = reduce ? 0 : Math.sin(t * 1.15 + i * 1.4) * 5;
       var dist0 = Math.abs(wrapD(i));
       var it = reduce ? 1 : Math.min(1, Math.max(0, (t - 0.08 - Math.min(dist0, 6) * 0.10) / 0.85));
@@ -8547,11 +8644,11 @@ a { color: inherit; }
       var base = f.H * W;
 
       // hero row (first product sits on the right, as the page reads right to left)
-      var hx = -dH * S + mx * (6 + Math.abs(dH) * 4), hy = Math.pow(Math.abs(dH), 1.6) * 7 + bob + introY;
+      var hx = -dH * S + mx * (6 + absDH * 4), hy = Math.pow(absDH, 1.6) * 7 + bob + introY;
       var hr = heroTilt(i) - dH * 1.4;
-      var ha = Math.max(0, 1 - Math.abs(dH));
+      var ha = Math.max(0, 1 - absDH);
       var hs = 0.9 + 0.3 * ha, hb = 0.34 + 0.66 * ha;
-      var ef = 1 - smooth(1.7, 2.45, Math.abs(dH)); // edge fade: the wrap-around jump happens while invisible
+      var ef = 1 - smooth(1.7, 2.45, absDH); // edge fade: the wrap-around jump happens while invisible
       // spotlight
       var spotS = (mob ? Math.min(vh * f.sp * 0.72, vh * 0.4) : vh * f.sp) / base;
       var sx = isA ? spX : -dRaw * vw * 0.34, sy = isA ? spY + bob * 0.4 : 0;
@@ -8573,20 +8670,18 @@ a { color: inherit; }
       el.style.opacity = op.toFixed(3);
       el.style.filter = 'brightness(' + br.toFixed(3) + ')' + (isA && wH > 0.5 ? ' drop-shadow(0 0 26px ' + f.c + '77)' : '');
       el.style.zIndex = Math.round(100 - ad * 10 + isA * 50);
-      el.style.pointerEvents = wH > 0.6 ? 'auto' : 'none';
+      el.style.pointerEvents = ptrEvt;
     }
 
-    // toggle back cover display when active product has imgBack and we are in panels 1, 2, 3
-    for (var bi = 0; bi < n; bi++) {
-      var bEl = cans[bi];
-      if (P[bi].imgBack) {
-        var shouldShowBack = (!openingProduct && bi === idx && wSp > 0.25 && factIdx >= 1);
-        if (shouldShowBack && !bEl.classList.contains('show-back')) {
-          bEl.classList.add('show-back');
-        } else if (!shouldShowBack && bEl.classList.contains('show-back')) {
-          bEl.classList.remove('show-back');
-        }
+    // toggle back cover display only for the active product (O(1) instead of looping all 70)
+    var nextBackIdx = (fa.imgBack && !openingProduct && wSp > 0.25 && factIdx >= 1) ? idx : -1;
+    if (nextBackIdx !== shownBackIdx) {
+      if (shownBackIdx >= 0) cans[shownBackIdx].classList.remove('show-back');
+      if (nextBackIdx >= 0) {
+        loadCanBack(nextBackIdx);
+        cans[nextBackIdx].classList.add('show-back');
       }
+      shownBackIdx = nextBackIdx;
     }
 
     shade.style.opacity = wSp.toFixed(3);
@@ -8603,8 +8698,8 @@ a { color: inherit; }
     facts.style.opacity = Math.min(1, wSp * 1.2).toFixed(3);
     slogan.style.opacity = wSl.toFixed(3);
     var sp = smooth(0.66, 0.8, p);
-    $('sl1').style.transform = 'translateX(' + ((1 - sp) * 26).toFixed(1) + 'vw)';
-    $('sl2').style.transform = 'translateX(' + ((1 - sp) * -26).toFixed(1) + 'vw)';
+    sl1El.style.transform = 'translateX(' + ((1 - sp) * 26).toFixed(1) + 'vw)';
+    sl2El.style.transform = 'translateX(' + ((1 - sp) * -26).toFixed(1) + 'vw)';
     if (pull > 0 && now - pullT > 700) setPull(pull - 0.03);
     requestAnimationFrame(frame);
   }
@@ -8630,46 +8725,50 @@ a { color: inherit; }
     var now = performance.now(), dt = Math.max(1, now - drag.lt);
     drag.v = drag.v * 0.6 + ((e.clientX - drag.lx) / dt) * 0.4; drag.lx = e.clientX; drag.lt = now;
     target = drag.pos0 + dx / S; lastInt = now; // row follows the finger (finger right -> row moves right)
+    preloadWindow(Math.round(target));
   });
   function endDrag() {
     if (!drag) return;
     var d = drag; drag = null;
     if (!d.moved) return;
-    dragging = false; $('stage').classList.remove('dragging');
+    dragging = false; stageEl.classList.remove('dragging');
     clickBlock = performance.now();
     var base = Math.round(d.pos0), proj = Math.round(target + d.v * 220 / S);
     target = Math.max(base - 3, Math.min(base + 3, proj));
+    preloadWindow(Math.round(target));
     lastInt = performance.now();
   }
   addEventListener('pointerup', endDrag);
   addEventListener('pointercancel', endDrag);
-  $('stage').classList.add('grab');
-  addEventListener('pointermove', function (e) { tmx = (e.clientX / vw - 0.5) * 2; });
-  $('stage').addEventListener('wheel', function (e) {
+  stageEl.classList.add('grab');
+  addEventListener('pointermove', function (e) { if (e.pointerType === 'mouse') tmx = (e.clientX / vw - 0.5) * 2; });
+  stageEl.addEventListener('wheel', function (e) {
     if (heroOn() && Math.abs(e.deltaX) > Math.abs(e.deltaY) && Math.abs(e.deltaX) > 24) { step(e.deltaX > 0 ? 1 : -1); e.preventDefault(); }
   }, { passive: false });
   function scrollToP(pp) { var r = journey.getBoundingClientRect(); scrollTo(0, Math.round(scrollY + r.top + pp * (r.height - vh))); }
   railBtns.forEach(function (b) { b.addEventListener('click', function () { scrollToP(0.15 + (+b.dataset.f + 0.5) / 4 * 0.49); }); });
 
   // tap a product -> centre it, then glide straight to its details (no scrolling through the others)
-  function animateScrollTo(y, dur) {
+  var scrollAnimId = 0;
+  function animateScrollTo(y, dur, onDone) {
+    var myId = ++scrollAnimId;
     var y0 = scrollY, dy = y - y0, st = performance.now(); autoScroll = true;
-    if (reduce) { scrollTo(0, y); autoScroll = false; openingProduct = false; return; }
+    if (reduce) { scrollTo(0, y); autoScroll = false; openingProduct = false; if (onDone) onDone(); return; }
     (function tick(now) {
-      if (!autoScroll) { openingProduct = false; return; }
+      if (!autoScroll || myId !== scrollAnimId) { if (myId === scrollAnimId) { openingProduct = false; if (onDone) onDone(); } return; }
       var k = Math.min(1, (now - st) / dur);
       var e = k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
       scrollTo(0, Math.round(y0 + dy * e));
-      if (k < 1) requestAnimationFrame(tick); else { autoScroll = false; openingProduct = false; }
+      if (k < 1) requestAnimationFrame(tick); else { autoScroll = false; openingProduct = false; if (onDone) onDone(); }
     })(st);
   }
   ['wheel', 'touchstart'].forEach(function (ev) { addEventListener(ev, function () { autoScroll = false; openingProduct = false; }, { passive: true }); });
   var snapTimer = null;
   addEventListener('scroll', function () {
-    if (autoScroll || looping || dragging || openingProduct) return;
+    if (autoScroll || looping || dragging || openingProduct || handlingPop) return;
     clearTimeout(snapTimer);
     snapTimer = setTimeout(function () {
-      if (autoScroll || looping || dragging || openingProduct) return;
+      if (autoScroll || looping || dragging || openingProduct || handlingPop) return;
       var r = journey.getBoundingClientRect();
       var span = Math.max(1, r.height - vh);
       var curP = Math.min(1, Math.max(0, -r.top / span));
@@ -8682,11 +8781,13 @@ a { color: inherit; }
   }, { passive: true });
   function openProduct(i) {
     var cur = Math.round(target); go(i);
+    loadCanBack(i);
+    enterDetailsHistory('product-' + P[i].k);
     openingProduct = true;
     rf = 0;
     var wait = Math.round(target) !== cur ? 420 : 0;
     setTimeout(function () {
-      if (looping) { openingProduct = false; return; }
+      if (looping || handlingPop) { openingProduct = false; return; }
       var r = journey.getBoundingClientRect();
       // If opening from the bottom hero carousel (p > 0.85), jump cleanly to top hero first so it glides straight into Panel 0 without passing backwards through back panels
       if (p > 0.85) { scrollTo(0, Math.max(0, Math.round(scrollY + r.top))); r = journey.getBoundingClientRect(); }
@@ -8694,6 +8795,14 @@ a { color: inherit; }
       animateScrollTo(Math.round(scrollY + r.top + p0Target * (r.height - vh)), 950);
     }, wait);
   }
+  addEventListener('popstate', function () {
+    inDetailsHistory = false;
+    openingProduct = false;
+    if (scrollY > 40) {
+      handlingPop = true;
+      animateScrollTo(0, 480, function () { handlingPop = false; });
+    }
+  });
 
   // scrolled past the very bottom -> the hero comes back round, like the original site
   var cue = $('loopcue'), curtain = $('curtain'), pull = 0, pullT = 0;
@@ -8743,8 +8852,8 @@ a { color: inherit; }
       var id = a.getAttribute('href').slice(1);
       e.preventDefault(); toggleMenu(false);
       if (id === 'top' || id === 'range') scrollTo({ top: 0, behavior: 'smooth' });
-      else if (id === 'benefits') scrollToP(0.3);
-      else { var el = document.getElementById(id); if (el) scrollTo({ top: el.getBoundingClientRect().top + scrollY, behavior: 'smooth' }); }
+      else if (id === 'benefits') { enterDetailsHistory('benefits'); scrollToP(0.3); }
+      else { var el = document.getElementById(id); if (el) { enterDetailsHistory(id); scrollTo({ top: el.getBoundingClientRect().top + scrollY, behavior: 'smooth' }); } }
     });
   });
 
@@ -8768,6 +8877,7 @@ a { color: inherit; }
       list.querySelectorAll('.faq-item').forEach(function (o) { o.classList.remove('open'); o.firstChild.setAttribute('aria-expanded', 'false'); });
       if (!open) { it.classList.add('open'); it.firstChild.setAttribute('aria-expanded', 'true'); }
       list.classList.toggle('has-open', !open);
+      setTimeout(measureLayout, 250);
     });
     list.appendChild(it);
   });
@@ -8812,6 +8922,7 @@ a { color: inherit; }
 
   root.style.setProperty('--spec', 'linear-gradient(270deg,' + P.map(function (f) { return f.c; }).join(',') + ')');
   size(); addEventListener('resize', size);
+  addEventListener('load', measureLayout);
   setActive(0);
   requestAnimationFrame(frame);
 })();
